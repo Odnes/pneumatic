@@ -1,0 +1,28 @@
+{% extends 'taxonomy_layout.html' %}
+
+{% block navigation %}
+
+    <span class="description" > {{ description }} </span><br>
+
+    {% for i in nav %}
+        <a href="">{{ i['name'] }}</a><br>    
+    {% endfor %}
+
+{% endblock %}
+
+{% block content %}
+<h1>Hello</h1>
+This is the content of Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+{% endblock %}
+
+{% block citations %}
+Here lie the citations
+1.Of<br>
+2.This<br>
+3.Article
+{% endblock %}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+    <meta name="description" content="{{ description }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link href="../static/css/normalize.css" rel="stylesheet">
+    <link href="../static/css/styles.css" rel="stylesheet">
+    
+</head>
+<body>
+    <div class="nav_wrap">
+        <nav role="navigation">
+            {% block navigation %}{% endblock %}
+        </nav>
+    </div>
+<!-- Wrapper divs are used for style only. It's good to separate style from semantics-->
+    <div class="content_wrap">
+        <main role="main">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <footer role="comment">
+        {% block citations %}{% endblock %}
+    </footer>
+</body>
+</html>
