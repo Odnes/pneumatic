@@ -18,6 +18,26 @@ quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+<br><br>
+Article titles:<br>
+{% for i in article %}
+    {{ i['title'] }}<br>
+    {{ i['content']|safe }} <br> <!-- safe filter necessary for rendering html -->
+{% endfor %}
+
+<br><br>
+{% for i in epistemic %}
+    {{ i['name'] }}<br>
+{% endfor %}
+<br>
+{% for i in types %}
+    {{ i['name'] }}<br>
+{% endfor %}
+<br>
+{% for i in status %}
+    {{ i['name'] }}<br>
+{% endfor %}
+
 {% endblock %}
 
 {% block citations %}
