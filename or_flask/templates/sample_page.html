@@ -23,6 +23,12 @@ Article titles:<br>
 {% for i in article %}
     {{ i['title'] }}<br>
     {{ i['content']|safe }} <br> <!-- safe filter necessary for rendering html -->
+    Tags:<br>
+        {% for j in i.tags_list %}
+            {{ j.name }}<br>
+        {% endfor %}
+    Epistemic_state: {{ i.epistemic_state.name }}<br>
+    ------------------------------------<br>
 {% endfor %}
 
 <br><br>

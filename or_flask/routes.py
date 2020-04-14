@@ -58,14 +58,8 @@ def article_from_md():
 #  There's also convertFile, but it only outputs to files or stdout, so I went
 #  manual
     html = md.convert(text)
+    tags_list = []
     prepare_dict = md.Meta
-    #  got to figure out tags here
-    for key in prepare_dict:
-        prepare_dict[key] = ''.join(prepare_dict[key])
-    prepare_dict['content'] = html
-    prepare_dict['last_major_edit'] =\
-        datetime.datetime.strptime(prepare_dict['last_major_edit'],
-                                   "%d/%m/%Y").date()
 
     if ('slug' in prepare_dict and
         'title' in prepare_dict and
@@ -74,6 +68,29 @@ def article_from_md():
         'epistemic_state' in prepare_dict and
         'type' in prepare_dict and
             'status' in prepare_dict):
+
+        if 'tags_list' in prepare_dict:
+            tags = prepare_dict.pop('tags_list')
+            for name in tags:
+                existing = Tags.query.filter(Tags.name == name).first()
+                if existing:
+                    print('Tag \'' + name + '\' already exists.')
+                    tags_list.append(existing)
+                else:
+                    tags_list.append(Tags(name=name, category=1))
+                    print('New domain tag \'' + name + '\' created.')
+            print('Tags to be appended: ')
+            for i in tags_list:
+                print(i.name + ', ')
+
+        for key in prepare_dict:
+            prepare_dict[key] = ''.join(prepare_dict[key])
+        prepare_dict['content'] = html
+        prepare_dict['tags_list'] = tags_list
+        prepare_dict['last_major_edit'] =\
+            datetime.datetime.strptime(prepare_dict['last_major_edit'],
+                                       "%d/%m/%Y").date()
+
         existing_slug = Articles.query.filter(Articles.slug ==
                                               prepare_dict['slug']
                                               ).first()
@@ -81,7 +98,8 @@ def article_from_md():
                                                prepare_dict['title']
                                                ).first()
         if existing_title or existing_slug:
-            return 'Title/slug already exists!'
+            return 'Title/slug already exists. Aborting.'
+            exit()
 
         def findDbIdForValue(key, db_object):
             existing = db_object.query.filter(db_object.name ==
@@ -107,10 +125,11 @@ def article_from_md():
         prepare_dict['status_id'] = status_id
 
         new_article = Articles(**prepare_dict)
+# it does not matter at which point an object is added to the session,
+# provided it's done prior to commitment. All relationship() bound
+# objects will also be added and commited, provided they exist.
         db.session.add(new_article)
         db.session.commit()
-# for articles, should use relationship to create new tag object, if not
-# existing. Should ask for confirmation
         return f'{new_article} succesfully commited from markdown'
     else:
-        return 'Article creation failed.'
+        return 'Missing required metadata keys'
