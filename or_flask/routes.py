@@ -11,7 +11,7 @@ def hello():
     epistemic = EpistemicStates.query.all()
     types = DocTypes.query.all()
     status = DocStatuses.query.all()
-    article = Articles.query.all()
+    article = Articles.query.order_by(Articles.last_major_edit.desc()).all()
     return render_template('sample_page.html', nav=nav,
                            epistemic=epistemic,
                            types=types,
