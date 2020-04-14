@@ -7,12 +7,12 @@ import datetime
 
 @current_app.route('/')
 def hello():
-    nav = Tags.query.all()
+    tags_nav = Tags.query.all()
     epistemic = EpistemicStates.query.all()
     types = DocTypes.query.all()
     status = DocStatuses.query.all()
     article = Articles.query.order_by(Articles.last_major_edit.desc()).all()
-    return render_template('sample_page.html', nav=nav,
+    return render_template('sample_page.html', tags_nav=tags_nav,
                            epistemic=epistemic,
                            types=types,
                            status=status,
