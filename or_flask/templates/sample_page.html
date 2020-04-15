@@ -54,6 +54,13 @@ Articles:<br>
     {{ i['name'] }}<br>
 {% endfor %}
 
+{% if previous_url %}
+    <a href="{{ previous_url }}">Newer posts</a>
+    {% endif %}
+    {% if next_url %}
+    <a href="{{ next_url }}">Older posts</a>
+{% endif %}
+
 {% endblock %}
 
 {% block citations %}

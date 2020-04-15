@@ -1,5 +1,4 @@
-from flask import request, render_template
-from flask import current_app
+from flask import request, render_template, current_app, url_for
 from .models import db, Tags, EpistemicStates, DocTypes, DocStatuses, Articles
 import markdown
 import datetime
@@ -7,16 +6,24 @@ import datetime
 
 @current_app.route('/')
 def hello():
+    page_number = request.args.get('page', 1, type=int)
     tags_nav = Tags.query.all()
     epistemic = EpistemicStates.query.all()
     types = DocTypes.query.all()
     status = DocStatuses.query.all()
-    article = Articles.query.order_by(Articles.last_major_edit.desc()).all()
+    pagination = Articles.query.order_by(Articles.last_major_edit.desc())\
+        .paginate(page_number, current_app.config['ARTICLES_PER_PAGE'], True)
+    next_url = url_for('hello', page=pagination.next_num) \
+        if pagination.has_next else None
+    previous_url = url_for('hello', page=pagination.prev_num) \
+        if pagination.has_prev else None
     return render_template('sample_page.html', tags_nav=tags_nav,
                            epistemic=epistemic,
                            types=types,
                            status=status,
-                           article=article,
+                           article=pagination.items,
+                           next_url=next_url,
+                           previous_url=previous_url,
                            title='jinja demo site',
                            description="smarter page templates \
                            with flask and jinja")
@@ -51,8 +58,12 @@ def create_meta():
 
 
 @current_app.route('/article_from_md')
-def article_from_md():
-    with open('sample_article.md', 'r') as file:
+def article_from_md(**kwargs):
+    if 'mdname' in kwargs:
+        mdname = kwargs['mdname']
+    else:
+        mdname = request.args.get('mdname', None, type=str)
+    with open(f'./sample_md_articles/{mdname}', 'r') as file:
         text = file.read()
     md = markdown.Markdown(extensions=['meta'])
 #  There's also convertFile, but it only outputs to files or stdout, so I went
@@ -133,3 +144,30 @@ def article_from_md():
         return f'{new_article} succesfully commited from markdown'
     else:
         return 'Missing required metadata keys'
+
+
+@current_app.route('/update_article')
+def update_article():
+    mdname = request.args.get('mdname', None, type=str)
+    with open(f'./sample_md_articles/{mdname}', 'r') as file:
+        text = file.read()
+    md = markdown.Markdown(extensions=['meta'])
+    md.convert(text)
+    metadata = md.Meta
+    if 'slug' not in metadata or 'title' not in metadata:
+        print('Missing title/slug. Aborting update.')
+        exit()
+    else:
+        article_to_update = Articles.query.filter(Articles.slug ==
+                                                  ''.join(metadata['slug'])
+                                                  ).first()
+        if article_to_update is None:
+            print('No match in database. Aborting.')
+            exit()
+        db.session.delete(article_to_update)
+        db.session.commit()
+        print('Article \'' + article_to_update.title +
+              '\' has been removed from the database')
+        article_from_md(mdname=mdname)
+        return 'Update function complete (creation is untested, check to\
+                make sure it\'s there'
