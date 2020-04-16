@@ -29,7 +29,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 Articles:<br>
 {% for i in article %}
     <span id="{{i.slug}}">
-    {{ i['title'] }}<br>
+    <div  class="inline-title"><h1>{{ i['title'] }}</h1> <button>|||</button><br></div>
     {{ i['content']|safe }} <br> <!-- safe filter necessary for rendering html -->
     Tags:<br>
         {% for j in i.tags_list %}
