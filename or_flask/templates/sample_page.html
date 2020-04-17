@@ -18,6 +18,7 @@
 {% endblock %}
 
 {% block content %}
+<br><br>
 <h1>Hello</h1>
 This is the content of Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -26,10 +27,11 @@ consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 <br><br>
+
 Articles:<br>
 {% for i in article %}
     <span id="{{i.slug}}">
-    <div  class="inline-title"><h1>{{ i['title'] }}</h1> <button>|||</button><br></div>
+    <div  class="inline-title"><h1>{{ i['title'] }}</h1> <button class="inline-title-button">|||</button><br></div>
     {{ i['content']|safe }} <br> <!-- safe filter necessary for rendering html -->
     Tags:<br>
         {% for j in i.tags_list %}
@@ -54,6 +56,21 @@ Articles:<br>
     {{ i['name'] }}<br>
 {% endfor %}
 
+
+<h1>Fake post</h1>
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud<label for="nostrud">⊕</label><input  type="checkbox" class="note-toggle"
+id="nostrud" ><sup class="sidenote">This is the content of the
+sidenote for "nostrud"</sup> exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat<label for="fugiat">⊕</label><input  type="checkbox" class="note-toggle"
+id="fugiat"><sup class="sidenote">This is the content of the
+sidenote for "fugiat"</sup> nulla pariatur. Excepteur sint occaecat 
+cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id 
+est laborum.
+<br><br>
 {% if previous_url %}
     <a href="{{ previous_url }}">Newer posts</a>
     {% endif %}
@@ -63,9 +80,3 @@ Articles:<br>
 
 {% endblock %}
 
-{% block citations %}
-Here lie the citations
-1.Of<br>
-2.This<br>
-3.Article
-{% endblock %}

@@ -17,27 +17,68 @@
    ---------------------------------------------------------*/
     body {
       display: flex;
-      font-family: monospace;
+      font-family: Verdana, monospace;
     }
     h1 {
       font-size: 1.2em;
       display:inline;
     }
+    sup {
+        line-height: 1.15em;
+    }
+    input.note-toggle {
+        display:none;
+    }
     .nav_wrap {
       background-color: rgba(138, 150,159,0.5);
       display:none;
+      max-width: 10em;
       }
     .content_wrap{
-      min-width: 400px;
-      margin: 20px;
+      max-width: 45em;
+      margin-left: 1.5em;
+      margin-right: 1.5em;
+    }
+    .sidenote{
+    
+      float: right;
+      max-width: 20em;
+      margin-right: -22em;
+      clear:right;
+      position: relative;
+      transform: translateY(-30%);
+
+    }
+    .inline-title-button{
+      float: right;
     }
 
+@media only screen and (max-width: 75em) {
+    /*largely copied from tufte css*/
+    .sidenote {
+      display:none;
+    }
+    .note-toggle:checked + .sidenote{
+        display: block;
+        float: left;
+        left: 1rem;
+        clear: both;
+        width: 95%;
+        max-width: 95%;
+        margin: 1rem 2.5%;
+        vertical-align: baseline;
+        position: relative; 
+    }
+}
 @media only screen and (min-width: 30em) {
     .inline-title {
         display:none;
     }
     .nav_wrap {
       display: flex;
+    }
+    .content_wrap{
+      margin-right: 5em;
     }
 }
 
