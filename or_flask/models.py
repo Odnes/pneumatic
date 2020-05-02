@@ -60,7 +60,7 @@ class Articles(db.Model):
     status = db.relationship("DocStatuses", backref='article_list')
 
     def __repr__(self):
-        return '<Title: {}>'.format(self.title)
+        return 'Article titled: \'{}\''.format(self.title)
 
 
 class Tags(db.Model):

@@ -1,7 +1,7 @@
 from flask import request, render_template, current_app, url_for
-from .models import db, Tags, EpistemicStates, DocTypes, DocStatuses, Articles
-import markdown
-import datetime
+from . import db
+from .models import Tags, EpistemicStates, DocTypes, DocStatuses, Articles
+from .lib import dict_from_md
 
 
 @current_app.route('/')
@@ -59,115 +59,53 @@ def create_meta():
 
 @current_app.route('/article_from_md')
 def article_from_md(**kwargs):
-    if 'mdname' in kwargs:
-        mdname = kwargs['mdname']
+    # called from update_article with dict already prepared
+    if 'dict' in kwargs:
+        prepared_dict = kwargs['dict']
     else:
-        mdname = request.args.get('mdname', None, type=str)
-    with open(f'./sample_md_articles/{mdname}', 'r') as file:
-        text = file.read()
-    md = markdown.Markdown(extensions=['meta'])
-#  There's also convertFile, but it only outputs to files or stdout, so I went
-#  manual
-    html = md.convert(text)
-    tags_list = []
-    prepare_dict = md.Meta
+        filename = request.args.get('filename', None, type=str)
+        prepared_dict = dict_from_md(filename)
+        #  try/catch
+        if not isinstance(prepared_dict, dict):
+            return 'Failed converting md file to dictionary.'
 
-    if ('slug' in prepare_dict and
-        'title' in prepare_dict and
-        'importance' in prepare_dict and
-        'last_major_edit' in prepare_dict and
-        'epistemic_state' in prepare_dict and
-        'type' in prepare_dict and
-            'status' in prepare_dict):
+    existing_slug = Articles.query.filter(Articles.slug ==
+                                          prepared_dict['slug']
+                                          ).first()
+    existing_title = Articles.query.filter(Articles.title ==
+                                           prepared_dict['title']
+                                           ).first()
+#  try/catch
+    if existing_title or existing_slug:
+        return 'Title/slug already exists. Aborting.'
 
-        if 'tags_list' in prepare_dict:
-            tags = prepare_dict.pop('tags_list')
-            for name in tags:
-                existing = Tags.query.filter(Tags.name == name).first()
-                if existing:
-                    print('Tag \'' + name + '\' already exists.')
-                    tags_list.append(existing)
-                else:
-                    tags_list.append(Tags(name=name, category=1))
-                    print('New domain tag \'' + name + '\' created.')
-            print('Tags to be appended: ')
-            for i in tags_list:
-                print(i.name + ', ')
-
-        for key in prepare_dict:
-            prepare_dict[key] = ''.join(prepare_dict[key])
-        prepare_dict['content'] = html
-        prepare_dict['tags_list'] = tags_list
-        prepare_dict['last_major_edit'] =\
-            datetime.datetime.strptime(prepare_dict['last_major_edit'],
-                                       "%d/%m/%Y").date()
-
-        existing_slug = Articles.query.filter(Articles.slug ==
-                                              prepare_dict['slug']
-                                              ).first()
-        existing_title = Articles.query.filter(Articles.title ==
-                                               prepare_dict['title']
-                                               ).first()
-        if existing_title or existing_slug:
-            return 'Title/slug already exists. Aborting.'
-            exit()
-
-        def findDbIdForValue(key, db_object):
-            existing = db_object.query.filter(db_object.name ==
-                                              prepare_dict[key]
-                                              ).first()
-            if existing is None:
-                print('Value ' + key + ': ' + prepare_dict[key] +
-                      ' not existing. Aborting.')
-                exit()
-            else:
-                print('All good for' + key)
-                return existing.id
-
-        es_id = findDbIdForValue('epistemic_state', EpistemicStates)
-        type_id = findDbIdForValue('type', DocTypes)
-        status_id = findDbIdForValue('status', DocStatuses)
-
-        del prepare_dict['epistemic_state']
-        prepare_dict['epistemic_state_id'] = es_id
-        del prepare_dict['type']
-        prepare_dict['type_id'] = type_id
-        del prepare_dict['status']
-        prepare_dict['status_id'] = status_id
-
-        new_article = Articles(**prepare_dict)
+    new_article = Articles(**prepared_dict)
 # it does not matter at which point an object is added to the session,
 # provided it's done prior to commitment. All relationship() bound
 # objects will also be added and commited, provided they exist.
-        db.session.add(new_article)
-        db.session.commit()
-        return f'{new_article} succesfully commited from markdown'
-    else:
-        return 'Missing required metadata keys'
+    db.session.add(new_article)
+    db.session.commit()
+    return f'{new_article} succesfully commited from markdown'
 
 
 @current_app.route('/update_article')
 def update_article():
-    mdname = request.args.get('mdname', None, type=str)
-    with open(f'./sample_md_articles/{mdname}', 'r') as file:
-        text = file.read()
-    md = markdown.Markdown(extensions=['meta'])
-    md.convert(text)
-    metadata = md.Meta
-    if 'slug' not in metadata or 'title' not in metadata:
-        print('Missing title/slug. Aborting update.')
-        exit()
-    else:
-        article_to_update = Articles.query.filter(Articles.slug ==
-                                                  ''.join(metadata['slug'])
-                                                  ).first()
-        if article_to_update is None:
-            print('No match in database. Aborting.')
-            exit()
-        db.session.delete(article_to_update)
-        db.session.commit()
-        print('Article \'' + article_to_update.title +
-              '\' has been removed from the database')
-        article_from_md(mdname=mdname)
-        return 'Update function complete (creation is untested, check to\
-                make sure it\'s there'
+    filename = request.args.get('filename', None, type=str)
+    prepared_dict = dict_from_md(filename)
+#  try/catch
+    if not isinstance(prepared_dict, dict):
+        return 'Failed converting md file to dictionary. Update aborted.'
+
+    if 'slug' not in prepared_dict or 'title' not in prepared_dict:
+        return 'Missing title/slug. Update aborted.'
+# DB object is matched with 'slug'. Title update is allowed, but
+# discouraged, since uniqueness is not programmatically assured.
+# (dbms should handle it though)
+    article_to_update = Articles.query.filter(Articles.slug ==
+                                              prepared_dict['slug']
+                                              ).first()
+    if article_to_update is None:
+        return 'No matching article in database. Update aborted.'
+
+    db.session.delete(article_to_update)
+    return article_from_md(dict=prepared_dict)+'<br>Update operation returned.'
