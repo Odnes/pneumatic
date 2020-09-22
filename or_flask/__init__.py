@@ -12,7 +12,7 @@ def create_app():
     db.init_app(app)
 
     with app.app_context():
-        from . import routes
+        from . import routes  # for testing from console
 
     # Create tables from the models
         db.create_all()

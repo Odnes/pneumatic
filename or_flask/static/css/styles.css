@@ -61,6 +61,12 @@
       float: right;
     }
 
+    .selected-title{
+      font-weight: bold;
+      text-decoration: underline;
+      color: red !important;
+    }
+
 @media only screen and (max-width: 75em) {
     /*largely copied from tufte css*/
     .sidenote {
@@ -74,7 +80,6 @@
         width: 95%;
         max-width: 95%;
         margin: 1rem 2.5%;
-        vertical-align: baseline;
         position: relative; 
     }
 }
@@ -84,9 +89,12 @@
     }
     .nav_wrap {
       display: flex;
+      position: fixed;
     }
+   
     .content_wrap{
       margin-right: 5em;
+      margin-bottom: 5em;
     }
 }
 

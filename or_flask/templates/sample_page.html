@@ -4,20 +4,55 @@
 
     <span class="description" > {{ description }} </span><br>
 
-    {% for i in tags_nav %}
-        <a href="">{{ i['name'] }}</a><br>    
-    {% endfor %}
-    <br>
+    {% block js_import %}
+        <script>
+            var pageTitles = `{{ self.sidebar_titles() }}`
+            var sidebarSemantics = []
+            var semanticsRoute = {{ url_for('pull_semantics')|tojson }}
+            getRoute(semanticsRoute)
+            var tagList
+            {% for i in article %}
+                {% for j in i['tags_list'] %}
+                 tagList = `{{ i['tags_list']|safe}}.{{j['name']|safe}}`
+                sidebarSemantics.push(tagList)
+                {% endfor %}
+            {% endfor %}
+            console.log(sidebarSemantics)
+        </script>
+    {% endblock %}
 
-    {% for i in article %}
-    --------------<br>
-    <a href="#{{i.slug}}">{{ i.title }}</a><br>
-    {% endfor %}
+    <button onclick="displayTitles(pageTitles)"> Titles </button>
+    <button onclick="pullMetadata()"> Semantics </button>
 
+    <div id="sidebar-content">
+        {{ self.sidebar_titles() }}
+    </div>
+    
+    
 
 {% endblock %}
 
+{% block sidebar_titles %}
+
+        {% for i in article %}
+        --------------<br>
+        <a id="sidebar_{{i.slug}}" href="#{{i.slug}}">{{ i.title }}</a><br>
+        {% endfor %}
+        
+        <br>
+        {% for i in tags_nav %}
+        <a href="">{{ i['name'] }}</a><br>    
+        {% endfor %}
+        <br>
+
+{% endblock %}
+
+<!-- sidebar_semantics blocks of number equal to ARTICLES_PER_PAGE, programmatically
+selectable; impossible in jinja:
+https://stackoverflow.com/questions/44703850/use-a-variable-name-for-a-blocks-name-in-jinja2-->       
+
 {% block content %}
+
 <br><br>
 <h1>Hello</h1>
 This is the content of Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -30,9 +65,10 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 Articles:<br>
 {% for i in article %}
-    <span id="{{i.slug}}">
+    <div class="article" id="{{i.slug}}">
     <div  class="inline-title"><h1>{{ i['title'] }}</h1> <button class="inline-title-button">|||</button><br></div>
     {{ i['content']|safe }} <br> <!-- safe filter necessary for rendering html -->
+    
     Tags:<br>
         {% for j in i.tags_list %}
             {{ j.name }}<br>
@@ -40,35 +76,9 @@ Articles:<br>
     Epistemic_state: {{ i.epistemic_state.name }}<br>
     Last major edit: {{ i.last_major_edit }}<br>
     ------------------------------------<br>
-    </span>
+    </div>
 {% endfor %}
 
-<br><br>
-{% for i in epistemic %}
-    {{ i['name'] }}<br>
-{% endfor %}
-<br>
-{% for i in types %}
-    {{ i['name'] }}<br>
-{% endfor %}
-<br>
-{% for i in status %}
-    {{ i['name'] }}<br>
-{% endfor %}
-
-
-<h1>Fake post</h1>
-<!-- The first note-toggle ought to work, but doesn't-->
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud<label>⊕<input type="checkbox" class="note-toggle"></label><sup class="sidenote">This is the content of the
-sidenote for "nostrud"</sup> exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat<label for="fugiat">⊕</label><input  type="checkbox" class="note-toggle"
-id="fugiat"><sup class="sidenote">This is the content of the
-sidenote for "fugiat"</sup> nulla pariatur. Excepteur sint occaecat 
-cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id 
-est laborum.
 <br><br>
 {% if previous_url %}
     <a href="{{ previous_url }}">Newer posts</a>

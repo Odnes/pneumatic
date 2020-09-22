@@ -1,4 +1,4 @@
-from flask import request, render_template, current_app, url_for
+from flask import request, render_template, current_app, url_for, jsonify
 from . import db
 from .models import Tags, EpistemicStates, DocTypes, DocStatuses, Articles
 from .lib import dict_from_md
@@ -109,3 +109,12 @@ def update_article():
 
     db.session.delete(article_to_update)
     return article_from_md(dict=prepared_dict)+'<br>Update operation returned.'
+
+@current_app.route('/pull_semantics', methods=['POST'])
+def pull_semantics():
+    # request only has body field as payload, so no need to specify
+    requested_slug = request.json
+    article_for_slug = Articles.query.filter(
+        Articles.slug == requested_slug).first()
+    
+    return jsonify(article_for_slug)

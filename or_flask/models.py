@@ -1,4 +1,6 @@
 from . import db
+from dataclasses import dataclass
+from datetime import date
 
 # Docs: flask-sqlalchemy "Declaring Models", sqlalchemy "Basic Relationship
 # Patterns"
@@ -17,7 +19,59 @@ article_tags = db.Table('article_tags',
                         )
 
 
+@dataclass
+class Tags(db.Model):
+    name: str
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(40),
+                     unique=True,
+                     index=True,
+                     nullable=False)
+    category = db.Column(db.Integer)
+
+
+@dataclass
+class EpistemicStates(db.Model):
+    name: str
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text,
+                     unique=True,
+                     nullable=False)
+
+
+@dataclass
+class DocTypes(db.Model):
+    name: str
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text,
+                     unique=True,
+                     nullable=False)
+
+
+@dataclass
+class DocStatuses(db.Model):
+    name: str
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text,
+                     unique=True,
+                     nullable=False)
+
+
+@dataclass
 class Articles(db.Model):
+    # Dataclass JSON serialisation doesn't return dynamic fields
+    # Ignoring unneeded fields.
+    importance: int
+    last_major_edit: date
+    tags_list: Tags
+    epistemic_state: EpistemicStates
+    doc_type: DocTypes
+    status: DocStatuses
+
     id = db.Column(db.Integer, primary_key=True)
     slug = db.Column(db.String(100),
                      unique=True,
@@ -61,33 +115,3 @@ class Articles(db.Model):
 
     def __repr__(self):
         return 'Article titled: \'{}\''.format(self.title)
-
-
-class Tags(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(40),
-                     unique=True,
-                     index=True,
-                     nullable=False)
-    category = db.Column(db.Integer)
-
-
-class EpistemicStates(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text,
-                     unique=True,
-                     nullable=False)
-
-
-class DocTypes(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text,
-                     unique=True,
-                     nullable=False)
-
-
-class DocStatuses(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text,
-                     unique=True,
-                     nullable=False)
