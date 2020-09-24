@@ -1,5 +1,7 @@
 import markdown
 import datetime
+import re
+import string
 from .models import Tags, EpistemicStates, DocTypes, DocStatuses
 
 
@@ -22,16 +24,40 @@ def db_id_for_meta_value(meta_value, db_object):
     return existing.id
 
 
+def convert_sidenotes(source_text):
+    def unique_id_replacement(match_obj):
+        # mended .md is returned after unique_id_replacement() runs
+        # count times (optional argument in .sub() )
+        dirty_slug = "-".join(match_obj.group(1)
+                              .split(sep=" ", maxsplit=6)[:5]).lower()
+        clean_slug = dirty_slug.translate(str.maketrans('', '',
+                                          string.punctuation.replace('-', '')))
+        sidenote_html = \
+            f"""
+                <label for="sn-{clean_slug}">⊕</label>
+                <input  type="checkbox" class="note-toggle"
+                id="sn-{clean_slug}" >
+                <sup class="sidenote">{match_obj.group(1)}</sup>
+             """
+        return sidenote_html
+    # Is a RegEx solution the simplest possible?
+    pattern = re.compile(r'\n\* (.*) \*\n')
+    md_with_sidenotes = pattern.sub(unique_id_replacement, source_text)
+    return md_with_sidenotes
+
 def dict_from_md(filename):
     REQUIRED_META = {'slug', 'title', 'last_major_edit',
                      'importance', 'type',
                      'epistemic_state', 'status'}
-    OPTIONAL_META = {'tags'}
-    text = read_file(filename)
+    OPTIONAL_META = {'tags_list'}
+    source_text = read_file(filename)
+
+    md_with_sidenotes = convert_sidenotes(source_text)
+
     md = markdown.Markdown(extensions=['meta'])
 #  There's also convertFile, but it only outputs to files or stdout, so I went
 #  manual
-    html = md.convert(text)
+    html = md.convert(md_with_sidenotes)
     metadata = md.Meta
     tags = []
     prepared_dict = {}
@@ -42,8 +68,8 @@ def dict_from_md(filename):
         print('Missing or wrong metadata.')
         return
 
-    if 'tags' in metadata:
-        tags_in_file = metadata.pop('tags')
+    if 'tags_list' in metadata:
+        tags_in_file = metadata.pop('tags_list')
         for name in tags_in_file:
             existing_in_db = Tags.query.filter(Tags.name == name).first()
             if existing_in_db:
