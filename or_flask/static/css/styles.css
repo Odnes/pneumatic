@@ -34,7 +34,7 @@
     sup {
         line-height: 1.15em;
     }
-    input.note-toggle {
+    input.note-toggle, input.overlay-toggle {
         display:none;
     }
     .nav_wrap {
@@ -57,8 +57,9 @@
       transform: translateY(-30%);
 
     }
-    .inline-title-button{
+    .overlay-button{
       float: right;
+      font-size: 2em;
     }
 
     .selected-title{
@@ -69,10 +70,12 @@
 
 @media only screen and (max-width: 75em) {
     /*largely copied from tufte css*/
-    .sidenote {
+    .sidenote, .semantics-overlay {
       display:none;
     }
-    .note-toggle:checked + .sidenote{
+
+    /* "+" Is called adjacent sibling selector. */
+    .note-toggle:checked + .sidenote, .overlay-toggle:checked + .semantics-overlay{ 
         display: block;
         float: left;
         left: 1rem;
@@ -90,9 +93,15 @@
     .nav_wrap {
       display: flex;
       position: fixed;
+      height: 100%;
+    }
+
+    div.nav_wrap a {
+     /*Keep spacing steady when zooming? */
     }
    
     .content_wrap{
+      margin-left: 12em;
       margin-right: 5em;
       margin-bottom: 5em;
     }

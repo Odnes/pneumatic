@@ -38,12 +38,7 @@
         --------------<br>
         <a id="sidebar_{{i.slug}}" href="#{{i.slug}}">{{ i.title }}</a><br>
         {% endfor %}
-        
-        <br>
-        {% for i in tags_nav %}
-        <a href="">{{ i['name'] }}</a><br>    
-        {% endfor %}
-        <br>
+
 
 {% endblock %}
 
@@ -66,7 +61,20 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 Articles:<br>
 {% for i in article %}
     <div class="article" id="{{i.slug}}">
-    <div  class="inline-title"><h1>{{ i['title'] }}</h1> <button class="inline-title-button">|||</button><br></div>
+    <div  class="inline-title">
+        <h1>{{ i['title'] }}</h1> 
+        <label class="overlay-button" for="overlay-{{i.slug}}">⊕</label><br>
+        <input type="checkbox" class="overlay-toggle" id="overlay-{{i.slug}}">
+        <div class="semantics-overlay">
+            {% for j in i.tags_list %}
+                {{ j.name }}<br>
+            {% endfor %}
+            Epistemic_state: {{ i.epistemic_state.name }}<br>
+            Last major edit: {{ i.last_major_edit }}<br>
+        </div>
+    </div>
+    <br>
+    
     {{ i['content']|safe }} <br> <!-- safe filter necessary for rendering html -->
     
     Tags:<br>
