@@ -66,6 +66,7 @@ Articles:<br>
         <label class="overlay-button" for="overlay-{{i.slug}}">⊕</label><br>
         <input type="checkbox" class="overlay-toggle" id="overlay-{{i.slug}}">
         <div class="semantics-overlay">
+            Tags:<br>
             {% for j in i.tags_list %}
                 {{ j.name }}<br>
             {% endfor %}

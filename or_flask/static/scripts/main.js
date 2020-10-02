@@ -64,6 +64,18 @@ const pullMetadata = () => {
 const parseJSON = (response) => response.json()
 
 const displaySemantics = (data) => {
-  titleView = false
-  document.getElementById('sidebar-content').innerHTML = JSON.stringify(data, null, 2)
+  tags= ''
+  //if(typeof data.tags_list != 'undefined' && data.tags_list != null){
+    for (i in data.tags_list)
+          tags = tags + data.tags_list[i].name + '<br>'   
+      
+  html =
+   `
+   Tags:<br>
+      ${tags} <br>
+    Epistemic_state: ${data.epistemic_state.name} <br><br>
+    Last major edit: ${JSON.stringify(data.last_major_edit)} <br>
+   `
+  document.getElementById('sidebar-content').innerHTML = html
+  titleView = false //placed last to be skipped in case above operations fail
 }
