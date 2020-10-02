@@ -45,6 +45,7 @@ def convert_sidenotes(source_text):
     md_with_sidenotes = pattern.sub(unique_id_replacement, source_text)
     return md_with_sidenotes
 
+
 def dict_from_md(filename):
     REQUIRED_META = {'slug', 'title', 'last_major_edit',
                      'importance', 'type',

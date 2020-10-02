@@ -22,7 +22,7 @@ article_tags = db.Table('article_tags',
 @dataclass
 class Tags(db.Model):
     name: str
-    
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(40),
                      unique=True,

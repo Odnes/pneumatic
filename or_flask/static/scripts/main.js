@@ -6,25 +6,23 @@ const options = {
 }
 
 let routePath = '/'
-getRoute = (route) => {
+const getRoute = (route) => {
   routePath = route
 }
 
 const observerCallback = (entries) => {
-  currentObserverEntries = entries
   entries.forEach(entry => {
     const targetId = entry.target.getAttribute('id')
 
     if (entry.isIntersecting === true) {
       currentSlug = targetId
-      if(titleView === true) {
+      if (titleView === true) {
         document.getElementById(`sidebar_${targetId}`).classList.add('selected-title')
-      }
-      else {
+      } else {
         pullMetadata()
       }
     } else if (titleView === true) {
-      document.getElementById(`sidebar_${targetId}`).classList.remove('selected-title') 
+      document.getElementById(`sidebar_${targetId}`).classList.remove('selected-title')
     }
   }
   )
@@ -42,18 +40,18 @@ window.onload = () => { // waits for the page to load. Investigate async/defer.
 let titleView = true
 
 const displayTitles = (pageTitles) => {
-  titleView= true
+  titleView = true
   document.getElementById('sidebar-content').innerHTML = pageTitles
   document.getElementById(`sidebar_${currentSlug}`).classList.add('selected-title')
 }
 
 const pullMetadata = () => {
 // what is preventDefault about?
-  fetch(routePath,
+  window.fetch(routePath,
     {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(currentSlug)
     })
@@ -64,12 +62,11 @@ const pullMetadata = () => {
 const parseJSON = (response) => response.json()
 
 const displaySemantics = (data) => {
-  tags= ''
-  //if(typeof data.tags_list != 'undefined' && data.tags_list != null){
-    for (i in data.tags_list)
-          tags = tags + data.tags_list[i].name + '<br>'   
-      
-  html =
+  let tags = ''
+  for (const i in data.tags_list) {
+    tags = tags + data.tags_list[i].name + '<br>'
+  }
+  const html =
    `
    Tags:<br>
       ${tags} <br>
@@ -77,5 +74,5 @@ const displaySemantics = (data) => {
     Last major edit: ${JSON.stringify(data.last_major_edit)} <br>
    `
   document.getElementById('sidebar-content').innerHTML = html
-  titleView = false //placed last to be skipped in case above operations fail
+  titleView = false // placed last to be skipped in case above operations fail
 }
