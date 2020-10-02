@@ -92,9 +92,11 @@ def dict_from_md(filename):
         datetime.datetime.strptime(prepared_dict['last_major_edit'],
                                    "%d/%m/%Y").date()
 
-    es_id = db_id_for_meta_value('epistemic_state', EpistemicStates)
-    type_id = db_id_for_meta_value('type', DocTypes)
-    status_id = db_id_for_meta_value('status', DocStatuses)
+# no guard for function fail (e.g. invalid value for correct key)
+    es_id = db_id_for_meta_value(prepared_dict['epistemic_state'],
+                                 EpistemicStates)
+    type_id = db_id_for_meta_value(prepared_dict['type'], DocTypes)
+    status_id = db_id_for_meta_value(prepared_dict['status'], DocStatuses)
 
     del prepared_dict['epistemic_state']
     prepared_dict['epistemic_state_id'] = es_id
