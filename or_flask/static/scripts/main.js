@@ -41,8 +41,8 @@ window.onload = () => { // waits for the page to load. Investigate async/defer.
 }
 
 const displayTitles = (titles = 'Jinja provided no titles') => {
-  document.getElementById('sidebar-content').innerHTML = titles
-  document.getElementById(`sidebar_${currentSlug}`).classList.add('selected-title')
+  document.querySelector('#sidebar-content').innerHTML = titles
+  document.querySelector(`#sidebar_${currentSlug}`).classList.add('selected-title')
   titleView = true
 }
 
@@ -74,6 +74,6 @@ const displaySemantics = (data) => {
     Epistemic_state: ${data.epistemic_state.name} <br><br>
     Last major edit: ${JSON.stringify(data.last_major_edit)} <br>
    `
-  document.getElementById('sidebar-content').innerHTML = html
+  document.querySelector('#sidebar-content').innerHTML = html
   titleView = false // placed last to be skipped in case above operations fail
 }
