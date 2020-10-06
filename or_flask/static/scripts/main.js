@@ -6,7 +6,10 @@ const options = {
 }
 
 let routePath = '/'
-const getRoute = (route) => {
+let titleView = true
+let currentSlug = null
+
+const setRoute = (route) => {
   routePath = route
 }
 
@@ -22,14 +25,14 @@ const observerCallback = (entries) => {
         pullMetadata()
       }
     } else if (titleView === true) {
+      // MDN: If the string is not in the list, no error is thrown, and nothing happens.
       document.getElementById(`sidebar_${targetId}`).classList.remove('selected-title')
     }
   }
   )
 }
-let currentSlug = null
-
 const observer = new IntersectionObserver(observerCallback, options)
+
 window.onload = () => { // waits for the page to load. Investigate async/defer.
   const targets = document.querySelectorAll('.article')
   targets.forEach(target => {
@@ -37,15 +40,13 @@ window.onload = () => { // waits for the page to load. Investigate async/defer.
   })
 }
 
-let titleView = true
-
-const displayTitles = (pageTitles) => {
-  titleView = true
-  document.getElementById('sidebar-content').innerHTML = pageTitles
+const displayTitles = (titles = 'Jinja provided no titles') => {
+  document.getElementById('sidebar-content').innerHTML = titles
   document.getElementById(`sidebar_${currentSlug}`).classList.add('selected-title')
+  titleView = true
 }
 
-const pullMetadata = () => {
+const pullMetadata = (slug = currentSlug) => {
 // what is preventDefault about?
   window.fetch(routePath,
     {
@@ -53,7 +54,7 @@ const pullMetadata = () => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(currentSlug)
+      body: JSON.stringify(slug)
     })
     .then(parseJSON)
     .then(displaySemantics)

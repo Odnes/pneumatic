@@ -1,25 +1,7 @@
 {% extends 'taxonomy_layout.html' %}
 
 {% block navigation %}
-
     <span class="description" > {{ description }} </span><br>
-
-    {% block js_import %}
-        <script>
-            var pageTitles = `{{ self.sidebar_titles() }}`
-            var sidebarSemantics = []
-            var semanticsRoute = {{ url_for('pull_semantics')|tojson }}
-            getRoute(semanticsRoute)
-            var tagList
-            {% for i in article %}
-                {% for j in i['tags_list'] %}
-                 tagList = `{{ i['tags_list']|safe}}.{{j['name']|safe}}`
-                sidebarSemantics.push(tagList)
-                {% endfor %}
-            {% endfor %}
-            console.log(sidebarSemantics)
-        </script>
-    {% endblock %}
 
     <button onclick="displayTitles(pageTitles)"> Titles </button>
     <button onclick="pullMetadata()"> Semantics </button>
@@ -27,66 +9,63 @@
     <div id="sidebar-content">
         {{ self.sidebar_titles() }}
     </div>
-    
-    
-
 {% endblock %}
+
 
 {% block sidebar_titles %}
-
-        {% for i in article %}
+    {% for i in article %}
         --------------<br>
-        <a id="sidebar_{{i.slug}}" href="#{{i.slug}}">{{ i.title }}</a><br>
-        {% endfor %}
-
-
+    <a id="sidebar_{{i.slug}}" href="#{{i.slug}}">{{ i.title }}</a><br>
+    {% endfor %}
 {% endblock %}
+
 
 <!-- sidebar_semantics blocks of number equal to ARTICLES_PER_PAGE, programmatically
 selectable; impossible in jinja:
-https://stackoverflow.com/questions/44703850/use-a-variable-name-for-a-blocks-name-in-jinja2-->       
+https://stackoverflow.com/questions/44703850/use-a-variable-name-for-a-blocks-name-in-jinja2
+Logic in templates is discouraged.
+-->       
 
 {% block content %}
-
-<br><br>
-<h1>Hello</h1>
-This is the content of Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-<br><br>
-
-Articles:<br>
-{% for i in article %}
-    <div class="article" id="{{i.slug}}">
-    <div  class="inline-title">
-        <h1>{{ i['title'] }}</h1> 
-        <label class="overlay-button" for="overlay-{{i.slug}}">⊕</label><br>
-        <input type="checkbox" class="overlay-toggle" id="overlay-{{i.slug}}">
-        <div class="semantics-overlay">
-            Tags:<br>
+    <br><br>
+    <h1>Hello</h1>
+    This is the content of Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    <br><br>
+    
+    Articles:<br>
+    {% for i in article %}
+        <div class="article" id="{{i.slug}}">
+            <div  class="inline-title">
+                <h1>{{ i['title'] }}</h1> 
+                <label class="overlay-button" for="overlay-{{i.slug}}">⊕</label><br>
+                <input type="checkbox" class="overlay-toggle" id="overlay-{{i.slug}}">
+                <div class="semantics-overlay">
+                    Tags:<br>
+                    {% for j in i.tags_list %}
+                        {{ j.name }}<br>
+                    {% endfor %}
+                    Epistemic_state: {{ i.epistemic_state.name }}<br>
+                    Last major edit: {{ i.last_major_edit }}<br>
+                </div>
+            </div>
+            <br>
+        
+        {{ i['content']|safe }} <br> <!-- safe filter necessary for rendering html -->
+        
+        Tags:<br>
             {% for j in i.tags_list %}
                 {{ j.name }}<br>
             {% endfor %}
-            Epistemic_state: {{ i.epistemic_state.name }}<br>
-            Last major edit: {{ i.last_major_edit }}<br>
+        Epistemic_state: {{ i.epistemic_state.name }}<br>
+        Last major edit: {{ i.last_major_edit }}<br>
+        ------------------------------------<br>
         </div>
-    </div>
-    <br>
-    
-    {{ i['content']|safe }} <br> <!-- safe filter necessary for rendering html -->
-    
-    Tags:<br>
-        {% for j in i.tags_list %}
-            {{ j.name }}<br>
-        {% endfor %}
-    Epistemic_state: {{ i.epistemic_state.name }}<br>
-    Last major edit: {{ i.last_major_edit }}<br>
-    ------------------------------------<br>
-    </div>
-{% endfor %}
+    {% endfor %}
 
 <br><br>
 {% if previous_url %}

@@ -8,7 +8,17 @@
     <link href="../static/css/normalize.css" rel="stylesheet">
     <link href="../static/css/styles.css" rel="stylesheet">
     <script src="../static/scripts/main.js"></script>
+
+    {% block js_import %}
+        <script>
+            var semanticsRoute = {{ url_for('pull_semantics')|tojson }}
+            var pageTitles = `{{ self.sidebar_titles() }}`
+            setRoute(semanticsRoute)
+        </script>
+    {% endblock %}
+
 </head>
+
 <body>
     <div class="nav_wrap">
         <nav role="navigation">

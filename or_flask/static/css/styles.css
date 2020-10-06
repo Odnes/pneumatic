@@ -82,7 +82,7 @@
         clear: both;
         width: 95%;
         max-width: 95%;
-        margin: 1rem 2.5%;
+        margin: 1.5rem 2.5%;
         position: relative; 
     }
 }
@@ -95,15 +95,14 @@
       position: fixed;
       height: 100%;
     }
-
-    div.nav_wrap a {
-     /*Keep spacing steady when zooming? */
-    }
    
     .content_wrap{
       margin-left: 12em;
       margin-right: 5em;
       margin-bottom: 5em;
+    }
+     div.nav_wrap a {
+     /*Keep spacing steady when zooming? */
     }
 }
 
