@@ -21,12 +21,42 @@ def hello():
                            epistemic=epistemic,
                            types=types,
                            status=status,
-                           article=pagination.items,
+                           paginated_articles=pagination.items,
                            next_url=next_url,
                            previous_url=previous_url,
                            title='jinja demo site',
                            description="smarter page templates \
                            with flask and jinja")
+
+
+@current_app.route('/<doc_type>/<slug>')
+def article_page(doc_type: str, slug: str):
+    #  not sure if more efficient than just querying for slug
+    #  at least guards for wrong doctype-slug combination in URL
+
+    #  seems only one table may be filtered per filter, unless
+    #  boolean operators are used, which defeats the purpose of
+    #  filtering for type to save time (unlike logic operators, booleans
+    #  need to ascertain right side truthiness).
+    #  See comments:
+    #  https://stackoverflow.com/a/41349608/11470799
+    selected_article = Articles.query\
+     .join(DocTypes).filter(DocTypes.name == doc_type)\
+                    .filter(Articles.slug == slug).first()
+
+    return render_template('article_page.html', article=selected_article)
+
+
+@current_app.route('/tag/<name>')
+def ssr_tag_page(name: str):
+    # for table-associated M2M relationships, join(ModelName) won't do
+    # join(LeftModel.right_relationship) works though, making RightModel
+    # accessible. Go figure!
+    tagged_articles = Articles.query.join(Articles.tags_list)\
+                                    .filter(Tags.name == name).all()
+
+    return render_template('sample_page.html',
+                           paginated_articles=tagged_articles)
 
 
 @current_app.route('/create_tag')

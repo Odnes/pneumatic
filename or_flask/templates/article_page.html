@@ -1,0 +1,21 @@
+{% extends 'sample_page.html' %}
+
+{% block sidebar_content %}
+Tags: <br>
+	{% for i in article.tags_list %}
+		<a href="/tag/{{i.name}}">{{i.name}}</a><br>
+	{% endfor %}
+	<br>
+
+	Epistemic_state: <br>
+	{{article.epistemic_state.name}}
+	<br><br>
+
+	Last major edit: <br>
+	{{article.last_major_edit}}
+	<br><br>
+{% endblock %}
+
+{%  block content %}
+	{{article.content|safe}}
+{% endblock %}

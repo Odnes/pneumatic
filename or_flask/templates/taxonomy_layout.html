@@ -12,7 +12,8 @@
     {% block js_import %}
         <script>
             var semanticsRoute = {{ url_for('pull_semantics')|tojson }}
-            var pageTitles = `{{ self.sidebar_titles() }}`
+            //throws exception if sidebar_content isn't defined in child
+            var pageTitles = `{{ self.sidebar_content() }}`
             setRoute(semanticsRoute)
         </script>
     {% endblock %}
@@ -32,8 +33,5 @@
         </main>
     </div>
 
-    <footer role="comment">
-        {% block citations %}{% endblock %}
-    </footer>
 </body>
 </html>
