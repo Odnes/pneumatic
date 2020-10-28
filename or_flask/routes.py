@@ -44,7 +44,8 @@ def article_page(doc_type: str, slug: str):
      .join(DocTypes).filter(DocTypes.name == doc_type)\
                     .filter(Articles.slug == slug).first()
 
-    return render_template('article_page.html', article=selected_article)
+    return render_template('article_page.html', article=selected_article,
+                           description="dedicated article page")
 
 
 @current_app.route('/tag/<name>')
@@ -52,11 +53,14 @@ def ssr_tag_page(name: str):
     # for table-associated M2M relationships, join(ModelName) won't do
     # join(LeftModel.right_relationship) works though, making RightModel
     # accessible. Go figure!
-    tagged_articles = Articles.query.join(Articles.tags_list)\
-                                    .filter(Tags.name == name).all()
+    tagged_articles = Articles.query\
+                              .join(Articles.tags_list)\
+                              .filter(Tags.name == name)\
+                              .order_by(Articles.last_major_edit.desc()).all()
 
     return render_template('sample_page.html',
-                           paginated_articles=tagged_articles)
+                           paginated_articles=tagged_articles,
+                           description="Semantically filtered page")
 
 
 @current_app.route('/create_tag')
