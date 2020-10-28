@@ -57,6 +57,11 @@
       transform: translateY(-30%);
 
     }
+
+    #sidebar-tab-hotload{
+      display: none;
+    }
+
     .overlay-button{
       float: right;
       font-size: 2em;
