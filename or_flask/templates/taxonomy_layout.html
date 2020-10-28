@@ -7,23 +7,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <link href="../static/css/normalize.css" rel="stylesheet">
     <link href="../static/css/styles.css" rel="stylesheet">
-    <script src="../static/scripts/main.js"></script>
-
-    {% block js_import %}
-        <script>
-            var semanticsRoute = {{ url_for('pull_semantics')|tojson }}
-            //throws exception if sidebar_content isn't defined in child
-            var pageTitles = `{{ self.sidebar_content() }}`
-            setRoute(semanticsRoute)
-        </script>
-    {% endblock %}
+    
+    {% block js_import %}{% endblock %}
 
 </head>
 
 <body>
     <div class="nav_wrap">
         <nav role="navigation">
-            {% block navigation %}{% endblock %}
+            
+            {% block navigation %}
+                <span class="description" > {{ description }} </span><br>
+            
+                <br>
+
+                <map name="the-present">
+                    <area shape="circle" coords="48, 61, 2" href="/the-present"/>
+                </map>
+                <!--should trigger session history 'Back()' if JS is available; should be logo
+                on index, "<" on article_page, if index page num can at least be preserved with htmlref -->
+                <a href="/" style="font-style: underline">
+                    <img usemap="#the-present" class="logo" src="/static/assets/logo.png" alt="Go to Index/Logo">
+                </a>
+                <br>
+                
+                <div id="sidebar-tab-hotload">
+                    <button onclick="displayTitles(pageTitles)"> Titles </button>
+                    <button onclick="pullMetadata()"> Semantics </button>
+                </div>
+
+                <div id="sidebar-content">
+                    {{ self.sidebar_content() }}
+                </div>
+            
+            {% endblock %}
         </nav>
     </div>
 <!-- Wrapper divs are used for style only. It's good to separate style from semantics-->

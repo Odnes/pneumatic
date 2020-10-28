@@ -1,4 +1,6 @@
-{% extends 'sample_page.html' %}
+{% extends 'taxonomy_layout.html' %}
+
+{% block js_import %}{% endblock %}
 
 {% block sidebar_content %}
 Tags: <br>
@@ -17,5 +19,5 @@ Tags: <br>
 {% endblock %}
 
 {%  block content %}
-	{{article.content|safe}}
+	{% include "article_item.html" %}
 {% endblock %}

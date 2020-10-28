@@ -1,20 +1,13 @@
 {% extends 'taxonomy_layout.html' %}
 
-{% block navigation %}
-    <span class="description" > {{ description }} </span><br>
-
-    <br>
-    <!--should trigger session history 'Back()' if JS is available; should be logo
-    on index, "<" on article_page, if index page num can at least be preserved with htmlref -->
-    <a href="/" style="font-style: underline"> Back/LOGO </a>
-    <br><br>
-
-    <button onclick="displayTitles(pageTitles)"> Titles </button>
-    <button onclick="pullMetadata()"> Semantics </button>
-
-    <div id="sidebar-content">
-        {{ self.sidebar_content() }}
-    </div>
+{% block js_import %}
+    <script src="../static/scripts/main.js"></script>
+    <script>
+        var semanticsRoute = {{ url_for('pull_semantics')|tojson }}
+        //throws exception if sidebar_content isn't defined in child
+        var pageTitles = `{{ self.sidebar_content() }}`
+        setRoute(semanticsRoute)
+    </script>
 {% endblock %}
 
 
@@ -46,33 +39,9 @@ Logic in templates is discouraged.
     <br><br>
     
     Articles:<br>
-    {% for i in paginated_articles %}
-        <div class="article" id="{{i.slug}}">
-            <div  class="inline-title">
-                <h1>{{ i['title'] }}</h1> 
-                <label class="overlay-button" for="overlay-{{i.slug}}">⊕</label><br>
-                <input type="checkbox" class="overlay-toggle" id="overlay-{{i.slug}}">
-                <div class="semantics-overlay">
-                    Tags:<br>
-                    {% for j in i.tags_list %}
-                        {{ j.name }}<br>
-                    {% endfor %}
-                    Epistemic_state: {{ i.epistemic_state.name }}<br>
-                    Last major edit: {{ i.last_major_edit }}<br>
-                </div>
-            </div>
-            <br>
-        
-        {{ i['content']|safe }} <br> <!-- safe filter necessary for rendering html -->
-        
-        Tags:<br>
-            {% for j in i.tags_list %}
-                {{ j.name }}<br>
-            {% endfor %}
-        Epistemic_state: {{ i.epistemic_state.name }}<br>
-        Last major edit: {{ i.last_major_edit }}<br>
-        ------------------------------------<br>
-        </div>
+    {% for article in paginated_articles %}
+    <!-- Block: placeholder, inheritance, overriding. Include: proper for different variable contexts. Macro: like Include, more flexible-->
+        {% include "article_item.html"%}    
     {% endfor %}
 
 <br><br>
