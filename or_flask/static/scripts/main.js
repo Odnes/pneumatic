@@ -63,14 +63,15 @@ const pullMetadata = (slug = currentSlug) => {
 const parseJSON = (response) => response.json()
 
 const displaySemantics = (data) => {
-  let tags = ''
+  let tagLinks = ''
   for (const i in data.tags_list) {
-    tags = tags + data.tags_list[i].name + '<br>'
+    tagLinks = tagLinks +
+     `<a href="/tag/${data.tags_list[i].name}">${data.tags_list[i].name}</a><br>`
   }
   const html =
    `
    Tags:<br>
-      ${tags} <br>
+      ${tagLinks} <br>
     Epistemic_state: ${data.epistemic_state.name} <br><br>
     Last major edit: ${JSON.stringify(data.last_major_edit)} <br>
    `
