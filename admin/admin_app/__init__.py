@@ -14,7 +14,9 @@ def create_app():
     with app.app_context():
         from . import routes  # for testing from console
 
-    # Create tables from the models
-        db.create_all()
+    # Create tables from the models; only possible on server run
+    # as db out of function scope (necessary for access from other
+    # modules
+        #db.create_all()
 
     return app

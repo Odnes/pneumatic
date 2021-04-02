@@ -1,7 +1,7 @@
 {% extends 'taxonomy_layout.html' %}
 
 {% block js_import %}
-    <script src="../static/scripts/main.js"></script>
+    <script src="/static/scripts/main.js"></script>
     <script>
         var semanticsRoute = {{ url_for('pull_semantics')|tojson }}
         //throws exception if sidebar_content isn't defined in child

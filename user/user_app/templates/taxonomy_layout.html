@@ -5,8 +5,8 @@
     <title>{{ title }}</title>
     <meta name="description" content="{{ description }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <link href="../static/css/normalize.css" rel="stylesheet">
-    <link href="../static/css/styles.css" rel="stylesheet">
+    <link href="/static/css/normalize.css" rel="stylesheet">
+    <link href="/static/css/styles.css" rel="stylesheet">
     
     {% block js_import %}{% endblock %}
 
@@ -21,14 +21,17 @@
             
                 <br>
 
-                <map name="the-present">
-                    <area shape="circle" coords="48, 61, 2" href="/the-present"/>
-                </map>
                 <!--should trigger session history 'Back()' if JS is available; should be logo
                 on index, "<" on article_page, if index page num can at least be preserved with htmlref -->
-                <a href="/" style="font-style: underline">
-                    <img usemap="#the-present" class="logo" src="/static/assets/logo.png" alt="Go to Index/Logo">
-                </a>
+                    <div class="logo">
+                        <map name="the-present">
+                            <area shape="circle" coords="48, 61, 12" href="/the-present"/>
+                        </map>
+                        <!-- should refactor this ugliness, back button too -->
+                        <a href="/">
+                            <img usemap="#the-present" style="margin: inherit" src="/static/assets/logo.png" alt="Go to Index/Logo">
+                        </a>
+                    </div>
                 <br>
                 
                 <div id="sidebar-tab-hotload">

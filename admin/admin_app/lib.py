@@ -6,7 +6,7 @@ from .models import Tags, EpistemicStates, DocTypes, DocStatuses
 
 
 def read_file(filename):
-    with open(f'./sample_md_articles/{filename}', 'r') as file:
+    with open(f'../sample_md_articles/{filename}', 'r') as file:
         text = file.read()
         return text
 
@@ -25,7 +25,7 @@ def db_id_for_meta_value(meta_value, db_object):
 
 
 def convert_sidenotes(source_text):
-    def unique_id_replacement(match_obj):
+    def unique_id_replacement(matc6h_obj):
         # mended .md is returned after unique_id_replacement() runs
         # count times (optional argument in .sub() )
         dirty_slug = "-".join(match_obj.group(1)

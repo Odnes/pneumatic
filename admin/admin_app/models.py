@@ -51,6 +51,7 @@ class DocTypes(db.Model):
                      nullable=False)
 
 
+
 @dataclass
 class DocStatuses(db.Model):
     name: str

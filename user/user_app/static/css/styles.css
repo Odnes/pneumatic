@@ -24,10 +24,15 @@
       display:inline;
     }
 
-    .logo{
+    .logo {
+        display: flex;
+        justify-content: center;
         margin-top: 0px;
         margin-bottom: 0.3em;
-        width: 6em;
+    }
+
+    .logo img{
+      width: 6em;
     }
 
     img {
