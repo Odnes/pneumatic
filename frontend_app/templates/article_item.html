@@ -1,0 +1,26 @@
+<div class="article" id="{{article.slug}}">
+    <div  class="inline-title">
+        <h1>{{ article['title'] }}</h1> 
+        <label class="overlay-button" for="overlay-{{article.slug}}">⊕</label><br>
+        <input type="checkbox" class="overlay-toggle" id="overlay-{{article.slug}}">
+        <div class="semantics-overlay">
+        Tags:<br>
+        {% for tag in article.tags_list %}
+            {{ tag.name }}<br>
+        {% endfor %}
+        Epistemic_state: {{ article.epistemic_state.name }}<br>
+        Last major edit: {{ article.last_major_edit }}<br>
+        </div>
+    </div>
+<br>
+
+    {{ article['content']|safe }} <br> <!-- safe filter necessary for rendering html-->
+            
+    Tags:<br>
+        {% for tag in article.tags_list %}
+            {{ tag.name }}<br>
+        {% endfor %}
+    Epistemic_state: {{ article.epistemic_state.name }}<br>
+    Last major edit: {{ article.last_major_edit }}<br>
+            ------------------------------------<br>
+</div>
