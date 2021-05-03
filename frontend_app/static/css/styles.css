@@ -15,9 +15,11 @@
 /* ---------------------------------------------------------
    Author's styles
    ---------------------------------------------------------*/
+
     body {
       display: flex;
       font-family: Verdana, monospace;
+      line-height: 1.5em;
     }
     h1 {
       font-size: 1.2em;
@@ -49,6 +51,19 @@
     input.note-toggle, input.overlay-toggle {
         display:none;
     }
+    button {
+        font-family: Verdana;
+        color: #ffffff;
+        font-size: 1.5em;
+        background: #9fa172;
+        width: 6.5em;
+        text-decoration: none;
+        }
+        
+        button:hover {
+        background: #570808;
+        text-decoration: none;
+        }
     .nav_wrap {
       background-color: rgba(138, 150,159,0.5);
       display:none;
