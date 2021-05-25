@@ -8,7 +8,6 @@
         {% for tag in article.tags_list %}
             {{ tag.name }}<br>
         {% endfor %}
-        Epistemic_state: {{ article.epistemic_state.name }}<br>
         Last major edit: {{ article.last_major_edit }}<br>
         </div>
     </div>
@@ -20,7 +19,8 @@
         {% for tag in article.tags_list %}
             {{ tag.name }}<br>
         {% endfor %}
-    Epistemic_state: {{ article.epistemic_state.name }}<br>
+        <br>
+    Type: {{ article.doc_type.name }}<br>
     Last major edit: {{ article.last_major_edit }}<br>
             ------------------------------------<br>
 </div>

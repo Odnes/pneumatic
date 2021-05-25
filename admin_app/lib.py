@@ -2,7 +2,7 @@ import markdown
 import datetime
 import re
 import string
-from models import Tags, EpistemicStates, DocTypes, DocStatuses
+from models import Tags, DocTypes, DocStatuses
 
 
 def read_file(filename):
@@ -48,8 +48,7 @@ def convert_sidenotes(source_text):
 
 def dict_from_md(filename):
     REQUIRED_META = {'slug', 'title', 'last_major_edit',
-                     'importance', 'type',
-                     'epistemic_state', 'status'}
+                    'type', 'status'}
     OPTIONAL_META = {'tags_list'}
     source_text = read_file(filename)
 
@@ -66,8 +65,7 @@ def dict_from_md(filename):
 # {*dict} fetches set of keys in dict. Weird but concise. Just get used to it.
     if(not ({*metadata} == REQUIRED_META or
        {*metadata} == REQUIRED_META | OPTIONAL_META)):
-        print('Missing or wrong metadata.')
-        return
+        return "Missing or wrong metadata"
 
     if 'tags_list' in metadata:
         tags_in_file = metadata.pop('tags_list')
@@ -77,7 +75,9 @@ def dict_from_md(filename):
                 print('Tag \'' + name + '\' already exists.')
                 tags.append(existing_in_db)
             else:
+                # Unrecognized tags are automatically saved as domain tags.
                 tags.append(Tags(name=name, category=1))
+                # Should be printed in html response instead.
                 print('New domain tag \'' + name + '\' to be created.')
         print('Tags to be appended: ')
         for i in tags:
@@ -93,14 +93,10 @@ def dict_from_md(filename):
         datetime.datetime.strptime(prepared_dict['last_major_edit'],
                                    "%d/%m/%Y").date()
 
-# no guard for function fail (e.g. invalid value for correct key)
-    es_id = db_id_for_meta_value(prepared_dict['epistemic_state'],
-                                 EpistemicStates)
+# no guard for function fail (e.g. nonexistent key)
     type_id = db_id_for_meta_value(prepared_dict['type'], DocTypes)
     status_id = db_id_for_meta_value(prepared_dict['status'], DocStatuses)
 
-    del prepared_dict['epistemic_state']
-    prepared_dict['epistemic_state_id'] = es_id
     del prepared_dict['type']
     prepared_dict['type_id'] = type_id
     del prepared_dict['status']

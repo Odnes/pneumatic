@@ -1,12 +1,11 @@
 from flask import request, render_template, current_app, url_for, jsonify
-from models import Tags, EpistemicStates, DocTypes, DocStatuses, Articles
+from models import Tags, DocTypes, DocStatuses, Articles
 
 
 @current_app.route('/')
 def hello():
     page_number = request.args.get('page', 1, type=int)
     tags_nav = Tags.query.all()
-    epistemic = EpistemicStates.query.all()
     types = DocTypes.query.all()
     status = DocStatuses.query.all()
     pagination = Articles.query.order_by(Articles.last_major_edit.desc())\
@@ -16,7 +15,6 @@ def hello():
     previous_url = url_for('hello', page=pagination.prev_num) \
         if pagination.has_prev else None
     return render_template('sample_page.html', tags_nav=tags_nav,
-                           epistemic=epistemic,
                            types=types,
                            status=status,
                            paginated_articles=pagination.items,
@@ -41,7 +39,6 @@ def article_page(doc_type: str, slug: str):
     selected_article = Articles.query\
      .join(DocTypes).filter(DocTypes.name == doc_type)\
                     .filter(Articles.slug == slug).first()
-    panagiotis = 5* doc_type
 
     return render_template('article_page.html', article=selected_article,
                            description="dedicated article page")

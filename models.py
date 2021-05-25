@@ -32,16 +32,6 @@ class Tags(db.Model):
 
 
 @dataclass
-class EpistemicStates(db.Model):
-    name: str
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text,
-                     unique=True,
-                     nullable=False)
-
-
-@dataclass
 class DocTypes(db.Model):
     name: str
 
@@ -49,7 +39,6 @@ class DocTypes(db.Model):
     name = db.Column(db.Text,
                      unique=True,
                      nullable=False)
-
 
 
 @dataclass
@@ -66,10 +55,8 @@ class DocStatuses(db.Model):
 class Articles(db.Model):
     # Dataclass JSON serialisation doesn't return dynamic fields
     # Ignoring unneeded fields.
-    importance: int
     last_major_edit: date
     tags_list: Tags
-    epistemic_state: EpistemicStates
     doc_type: DocTypes
     status: DocStatuses
 
@@ -82,11 +69,7 @@ class Articles(db.Model):
                       index=True,
                       nullable=False)
     content = db.Column(db.Text, nullable=False)
-    importance = db.Column(db.Integer, nullable=False)
     last_major_edit = db.Column(db.Date, index=True, nullable=False)
-    epistemic_state_id = db.Column(db.Integer,
-                                   db.ForeignKey('epistemic_states.id'),
-                                   nullable=False)
     type_id = db.Column(db.Integer,
                         db.ForeignKey('doc_types.id'),
                         nullable=False
@@ -107,9 +90,6 @@ class Articles(db.Model):
                                 lazy='subquery',
                                 backref=db.backref('article_list', lazy=True)
                                 )
-    epistemic_state = db.relationship("EpistemicStates",
-                                      backref='article_list'
-                                      )
 # Risky to use "type" as variable name
     doc_type = db.relationship('DocTypes', backref='article_list')
     status = db.relationship("DocStatuses", backref='article_list')

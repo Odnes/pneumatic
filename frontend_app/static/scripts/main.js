@@ -73,9 +73,8 @@ const displaySemantics = (data) => {
   const html =
    `
    Tags:<br>
-      ${tagLinks} <br>
-    Epistemic_state: ${data.epistemic_state.name} <br><br>
-    Last major edit: ${JSON.stringify(data.last_major_edit)} <br>
+      ${tagLinks} <br><br>
+   Last major edit: ${JSON.stringify(data.last_major_edit)} <br>
    `
   document.querySelector('#sidebar-content').innerHTML = html
   titleView = false // placed last to be skipped in case above operations fail

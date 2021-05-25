@@ -1,6 +1,6 @@
 from flask import request, current_app
 from . import db
-from models import Tags, EpistemicStates, DocTypes, DocStatuses, Articles
+from models import Tags, DocTypes, DocStatuses, Articles
 from .lib import dict_from_md
 
 
@@ -21,19 +21,33 @@ def create_tag():
         db.session.commit()
     return f'{new_tag} succesfully created'
 
-
-@current_app.route('/admin/create_meta')
-def create_meta():
+# needs DRYing up via metaprogramming
+@current_app.route('/admin/create_status')
+def create_status():
     name = request.args.get('name')
     if name:
-        existing_meta = DocStatuses.query.filter(DocStatuses.name ==
+        existing_statuses = DocStatuses.query.filter(DocStatuses.name ==
                                                  name).first()
-        if existing_meta:
+        if existing_statuses:
             return f'{name} already created!'
-        new_meta = DocStatuses(name=name)
-        db.session.add(new_meta)
+        new_status = DocStatuses(name=name)
+        db.session.add(new_status)
         db.session.commit()
-    return f'{new_meta} succesfully created'
+    return f"Status '{new_status}' succesfully created"
+
+
+@current_app.route('/admin/create_type')
+def create_type():
+    name = request.args.get('name')
+    if name:
+        existing_types = DocTypes.query.filter(DocTypes.name ==
+                                                 name).first()
+        if existing_types:
+            return f"Type '{name}' already created!"
+        new_type = DocTypes(name=name)
+        db.session.add(new_type)
+        db.session.commit()
+    return f'{new_type} succesfully created'
 
 
 @current_app.route('/admin/article_from_md')
@@ -44,9 +58,10 @@ def article_from_md(**kwargs):
     else:
         filename = request.args.get('filename', None, type=str)
         prepared_dict = dict_from_md(filename)
-        #  try/catch
+        #  Alternate output is error string; should use try/catch instead
         if not isinstance(prepared_dict, dict):
-            return 'Failed converting md file to dictionary.'
+            return 'Failed converting md file to dictionary. <br>' +\
+                    prepared_dict
 
     existing_slug = Articles.query.filter(Articles.slug ==
                                           prepared_dict['slug']
