@@ -11,3 +11,7 @@ sample_md_articles
 assets
 
 webdasein.geany
+
+build
+dist
+jackhammer.egg-info
