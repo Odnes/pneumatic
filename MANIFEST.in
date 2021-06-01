@@ -1,0 +1,4 @@
+include models.py
+graft frontend_app/static
+graft frontend_app/templates
+global-exclude *.pyc
