@@ -1,4 +1,4 @@
-from admin_app import create_app
+from .admin_app import create_app
 from dotenv import load_dotenv
 
 # Done automatically on flask CLI / .run() method.

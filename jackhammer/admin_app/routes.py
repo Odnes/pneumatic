@@ -1,6 +1,6 @@
 from flask import request, current_app
 from . import db
-from models import Tags, DocTypes, DocStatuses, Articles
+from ..models import Tags, DocTypes, DocStatuses, Articles
 from .lib import dict_from_md
 
 

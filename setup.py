@@ -11,10 +11,11 @@ setup(
    long_description=long_description,
    author='Odysseas Neslechanidis',
    author_email='odnes@tiptheiceberg.com',
-   url='http://www.tiptheiceberg.com/',
+   url='http://github.com/odnes/jackhammer.git',
    include_package_data=True,
    zip_safe=False,
-   py_modules=['config', 'models', 'instantiate_db', 'wsgi_frontend', 'wsgi_admin'],
-   packages=find_packages(),
+   # This is for .py modules meant to reside in site-packages
+   #py_modules=['']
+   packages=['jackhammer'],
    install_requires=['Flask', 'Flask-SQLAlchemy', 'Markdown', 'python-dotenv']
 )

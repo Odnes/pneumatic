@@ -1,8 +1,10 @@
-from frontend_app import create_app
+from .frontend_app import create_app
 from dotenv import load_dotenv
 
 # Done automatically on flask CLI / .run() method.
 # Necessary for production servers.
+# Path is relative to the working directory of the shell from which the python interpreter, be it of
+# global or venv origin, is called.
 load_dotenv(".flaskenv")
 
 app = create_app()

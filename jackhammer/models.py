@@ -1,4 +1,4 @@
-from instantiate_db import db
+from .instantiate_db import db
 from dataclasses import dataclass
 from datetime import date
 

@@ -1,5 +1,5 @@
 from flask import request, render_template, current_app, url_for, jsonify
-from models import Tags, DocTypes, DocStatuses, Articles
+from ..models import Tags, DocTypes, DocStatuses, Articles
 
 
 @current_app.route('/')

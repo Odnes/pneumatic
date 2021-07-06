@@ -2,11 +2,11 @@ import markdown
 import datetime
 import re
 import string
-from models import Tags, DocTypes, DocStatuses
+from ..models import Tags, DocTypes, DocStatuses
 
 
 def read_file(filename):
-    with open(f'./sample_md_articles/{filename}', 'r') as file:
+    with open(f'./articles/{filename}', 'r') as file:
         text = file.read()
         return text
 
