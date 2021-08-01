@@ -1,5 +1,5 @@
 # jackhammer
-A minimal website revision system (CMS, if you must) built with flask. [Live instance](tiptheiceberg.com)
+A minimal website revision system (CMS, if you must) built with flask. [Live instance](https://tiptheiceberg.com)
 
 # Features
 - Tufte-CSS sidenotes
