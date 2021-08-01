@@ -1,5 +1,5 @@
 # jackhammer
-It's minimal website revision system (CMS, if you must) built with flask.
+It's a minimal website revision system (CMS, if you must) built with flask.
 
 # Features
 - Tufte-CSS sidenotes
