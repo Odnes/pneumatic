@@ -10,8 +10,8 @@ yada yada and to be continued.
 
 # Installation
 1. Clone the repo.
-2. Start and activate a python venv, do `pip install -r requirements.txt`.
-3. Add environment variables to REPO_PARENT/.flaskenv (edit secret key, db path appropriately) like so:
+2. Start and activate a python venv in the repo's root folder, do `pip install -r requirements.txt`.
+3. Add environment variables to REPO_ROOT/.flaskenv (edit secret key, db path appropriately) like so:
   ```
   FLASK_ENV=production
   SECRET_KEY=changemeplz
