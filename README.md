@@ -11,7 +11,7 @@ yada yada and to be continued.
 # Installation
 1. Clone the repo.
 2. Start and activate a python venv, do `pip install -r requirements.txt`.
-3. Add environment variables to PARENT/.flaskenv (edit secret key, db path appropriately) like so:
+3. Add environment variables to REPO_PARENT/.flaskenv (edit secret key, db path appropriately) like so:
   ```
   FLASK_ENV=production
   SECRET_KEY=changemeplz
@@ -20,7 +20,7 @@ yada yada and to be continued.
   ```
 4. Uncomment `db.create_all()` in the `__init__.py` of the admin app for the first run, in order to create the db schema.
 5. Run with a wsgi compatible server (e.g. gunicorn).
-6. Structure your  `article_template.md` for your articles, put them on an "articles" folder on the same level as the cloned repo.
+6. Structure your articles after `article_template.md`, place them on an "articles" folder on the same level as the cloned repo.
 7. Use `DOMAIN_ROOT/article_from_md?filename=example.md` to create your first article.
 8. Use the routes of the admin app to add missing metadata. Tags are added automatically.
 9. *(recommended)* Reverse proxy the frontend app through nginx, run admin app locally w/ VPN (e.g. wireguard) access for site admins.
