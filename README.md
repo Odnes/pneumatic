@@ -18,7 +18,7 @@ SECRET_KEY=changemeplz
 SQLALCHEMY_DATABASE_URI=sqlite:////path/to/file.db
 SQLALCHEMY_TRACK_MODIFICATIONS=False
 ```
-3. Uncomment db.create_all() in the __init__.py of the admin app for the first run, in order to create the db schema.
+3. Uncomment db.create_all() in the `__init__.py` of the admin app for the first run, in order to create the db schema.
 6. Run with a wsgi compatible server (e.g. gunicorn).
 4. Structure your  article_template.md for your articles, put them on an "articles" folder on the same level as the cloned repo.
 7. Use DOMAIN_ROOT/article_from_md?filename=example.md to create your first article.
