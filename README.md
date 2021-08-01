@@ -1,14 +1,14 @@
 # jackhammer
 A minimal website revision system (CMS, if you must) built with flask. [Live instance](https://tiptheiceberg.com)
 
-# Features
+## Features
 - Tufte-CSS sidenotes
 - Renders from sqlite, creates/updates through markdown files extended with metadata and sidenote syntax.
 - Highlights presently displayed article, draws corresponding metadata on the fly.
 - Usable without JavaScript.
 yada yada and to be continued.
 
-# Installation
+## Installation
 1. Clone the repo.
 2. Start and activate a python venv in the repo's root folder, do `pip install -r requirements.txt`.
 3. Add environment variables to REPO_ROOT/.flaskenv (edit secret key, db path appropriately) like so:
