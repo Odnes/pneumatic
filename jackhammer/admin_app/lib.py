@@ -8,8 +8,10 @@ from ..models import Tags, DocTypes, DocStatuses
 
 
 def read_file(filename, repo_url=current_app.config['ARTICLES_REPO']):
+    print("Attempting to access remote file: " + f'{repo_url}/{filename}')
     text = requests.get(f'{repo_url}/{filename}').text
     return text
+
 
 # Is meant for unique db keys.
 def db_id_for_meta_value(meta_value, db_object):
