@@ -3,11 +3,9 @@ import re
 
 
 class Config:
-    # Articles repository
     def __init__(self):
-        # Target the raw text files in case a github repository is provided.
-        self.ARTICLES_REPO = environ.get("articles_repo")
-
+        # For ARTICLES_REPO, target the raw text files in case a github
+        # repository is provided.
         is_github = re.match(
                       r".*github.com\/(\w+)\/(\w+)($|\.git$|\/tree/(\w+)$)",
                       self.ARTICLES_REPO)
@@ -18,8 +16,11 @@ class Config:
                 repo_details[0] + "/" + repo_details[1] +\
                 "/blob/" + repo_details[3]
 
+    # Articles repository
+    ARTICLES_REPO = environ.get("ARTICLES_REPO")
+
     # General
-    secret_key = environ.get('secret_key')
+    SECRET_KEY = environ.get('SECRET_KEY')
 
     # Database
     SQLALCHEMY_DATABASE_URI = environ.get('SQLALCHEMY_DATABASE_URI')
