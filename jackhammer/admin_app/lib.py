@@ -65,7 +65,7 @@ def dict_from_md(filename):
 # {*dict} fetches set of keys in dict. Weird but concise. Just get used to it.
     if(not ({*metadata} == REQUIRED_META or
        {*metadata} == REQUIRED_META | OPTIONAL_META)):
-        return "Missing or wrong metadata"
+        return "Missing or malformed .md file (use article_template.md)"
 
     if 'tags_list' in metadata:
         tags_in_file = metadata.pop('tags_list')
