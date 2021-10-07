@@ -25,7 +25,7 @@ class Config:
             repo_details = is_github.groups()
             # user, repository name, branch (optional), respectively
             textfiles_url = r"https://raw.githubusercontent.com/" +\
-                repo_details[0] + "/" + repo_details[1] + "/blob/"
+                repo_details[0] + "/" + repo_details[1] + "/"
             if repo_details[3]:
                 textfiles_url += repo_details[3]
             else:
