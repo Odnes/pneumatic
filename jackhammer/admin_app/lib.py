@@ -50,7 +50,7 @@ def convert_sidenotes(source_text):
 
 def dict_from_md(filename):
     REQUIRED_META = {'slug', 'title', 'last_major_edit',
-                    'type', 'status'}
+                     'type', 'status'}
     OPTIONAL_META = {'tags_list'}
     source_text = read_file(filename)
 
