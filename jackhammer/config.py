@@ -29,3 +29,7 @@ class Config:
                 "/blob/" + repo_details[3]
 
 
+# Instantiate the class, so that I may customize the ARTICLES_REPO attribute
+# through the constructor (though app.config.from_object() can target 
+# uninstantiated class objects as well).
+default_config = Config()
