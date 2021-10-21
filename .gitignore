@@ -3,7 +3,7 @@
 .idea
 .venv
 .flaskenv
-*/.flaskenv
+**/example.db
 __pycache__
 app.db
 

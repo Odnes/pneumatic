@@ -18,9 +18,13 @@ class Config:
     def __init__(self):
         # For ARTICLES_REPO, target the raw text files in case a github
         # repository is provided.
-        is_github = re.match(
-                      r".*github.com\/(\w+)\/(\w+)($|\.git$|\/tree/(\w+)$)",
-                      self.ARTICLES_REPO)
+        try:
+            is_github = re.match(
+                          r""".*github.com\/(\w+)\/(\w+)
+                                ($|\.git$|\/tree/(\w+)$)""",
+                          self.ARTICLES_REPO)
+        except TypeError:
+            print("Empty or non-string configuration variable.")
         if is_github:
             repo_details = is_github.groups()
             # user, repository name, branch (optional), respectively
