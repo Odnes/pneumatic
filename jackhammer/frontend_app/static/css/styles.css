@@ -1,92 +1,112 @@
-/* ---------------------------------------------------------
-   HTML5 Bones
-   This stylesheet contains print styling and a section for 
-   you to simply add your own. This is a basic template 
-   after all.
-   ---------------------------------------------------------*/
-    /* Default link styling */
-    a:link { color:#0271fb; }
+/*TODO claim remaining flexbox container width somehow so sidenotes may reappear
+    a:link { 
+        color:#0271fb;
+        text-decoration: none;
+    }
     a:visited { color:#bd02fb; }
-    a:hover, a:focus { color:#000; }
+    a:hover, a:focus { 
+        color:#000;
+        text-decoration: underline;
+    }
     a:active { color:#fb0e02; }
-    
-    
-    
-/* ---------------------------------------------------------
-   Author's styles
-   ---------------------------------------------------------*/
 
-    body {
-      display: flex;
-      font-family: Verdana, monospace;
-      line-height: 1.5em;
+    /* descendant selector; use > for direct child only
+     * Apparently, this takes precedence over the action selectors above*/
+/*TODO use CSS propertie for color */
+    div.nav_wrap  a {
+        text-decoration: none;
+        color:#0271fb;
+    }
+    div.nav_wrap a:hover, div.nav_wrap a:focus{ color:#000}
+
+    body {	
+        overflow: hidden;
+    /* body assumes viewport height; instrumental in letting only the nav_wrap
+       child be non-scrolling, avoiding use of "position: fixed;" that
+       drops it from box calculations.*/
+        height: 100vh; 
+
+        font-family: Verdana, monospace;
+        line-height: 1.5em;
     }
     h1 {
-      font-size: 1.2em;
-      display:inline;
+        font-size: 1.2em;
+        /* allow the mobile overlay button to appear next to the title */
+        display: inline; 
     }
 
     .logo {
-        display: flex;
-        justify-content: center;
-        margin-top: 0px;
-        margin-bottom: 0.3em;
     }
 
     .logo img{
-      width: 6em;
     }
 
     img {
-        max-width:90%;
-        display:block;
-        margin-top: 1.5em;
-        margin-bottom:1.5em;
-        margin-left: auto;
-        margin-right:auto;
     }
     sup {
-        line-height: 1.15em;
+/*TODO superscript; second line gets printed on the first otherwise; this shouldn't happen;
+    should investigate*/
+        line-height: 1.50em; 
     }
     input.note-toggle, input.overlay-toggle {
+/* TODO needs name refactoring; hides sidenote and mobile semantics overlay-to-be checkboxes
+    that's a nice task for sed/awk intro */
         display:none;
     }
     button {
-        font-family: Verdana;
-        color: #ffffff;
-        font-size: 1.5em;
-        background: #9fa172;
-        width: 6.5em;
-        text-decoration: none;
-        }
+        background-color: #f8f8f8;
+        height: 2em;
+        width: 6em;
+    }
         
-        button:hover {
-        background: #570808;
-        text-decoration: none;
+    button:hover {
         }
+
+    .flex_wrap {
+    /* itself is block, otherwise use inline-flex to get inline-block behavior; 
+       children become flexbox items either way */
+        display: flex;
+        height: 100%; /* of parent */
+    }
+
     .nav_wrap {
-      background-color: rgba(138, 150,159,0.5);
+/*      background-color: rgba(138, 150,159,0.5); */
+      /* defaults to nonexistexisting, appears when viewport is large */	    
       display:none;
-      max-width: 10em;
+
+
+      /* Plain width setting doesn't work */
+      max-width: 15em;
+      min-width: 15em;
       }
     .content_wrap{
-      max-width: 45em;
-      margin-left: 1.5em;
-      margin-right: 1.5em;
+        overflow-y: auto;
+        width: 100%
+   }
+    main {
+        max-width: 45em;
+        margin-left: 1.5em;
+        margin-right: 1.5em;
     }
     .sidenote{
-    
       float: right;
       max-width: 20em;
+      font-size: 0.85em;
+      font-style: italic;
+      /* this kludge is necessary with floating elements as the sidenote has a width itself 
+       * though im sure there must be a better way */
       margin-right: -22em;
-      clear:right;
-      position: relative;
+      /* in this property's particular case, percentage is relative to the height of the element itself, not 	     the parent's. */
       transform: translateY(-30%);
 
     }
-
+/*TODO name refactor*/
+    /* only display buttons if JS is present */
     #sidebar-tab-hotload{
-      display: none;
+        display: none;
+
+        width: 100%;
+        justify-content: space-around;
     }
 
     .overlay-button{
@@ -96,11 +116,11 @@
 
     .selected-title{
       font-weight: bold;
-      text-decoration: underline;
-      color: red !important;
     }
 
-@media only screen and (max-width: 75em) {
+
+/*TODO: Use css properties to tidy up width addition calculations a bit*/
+@media only screen and (max-width: 80em) {
     /*largely copied from tufte css*/
     .sidenote, .semantics-overlay {
       display:none;
@@ -118,59 +138,11 @@
         position: relative; 
     }
 }
-@media only screen and (min-width: 30em) {
+@media only screen and (min-width: 45em) {
     .inline-title {
         display:none;
     }
     .nav_wrap {
-      display: flex;
-      position: fixed;
-      height: 100%;
+      display: inherit;
     }
-   
-    .content_wrap{
-      margin-left: 12em;
-      margin-right: 5em;
-      margin-bottom: 5em;
-    }
-     div.nav_wrap a {
-     /*Keep spacing steady when zooming? */
-    }
-}
-
-    
-/* ---------------------------------------------------------
-   Print styles
-   ---------------------------------------------------------*/
-@media print {
-    * {
-        color:#000 !important;
-        box-shadow:none !important;
-        text-shadow:none !important;
-        background:transparent !important;
-    }
-    html { background-color:#fff; }
-    /* Hide navigation */
-    nav { display:none; }
-
-    /* Show link destinations in brackets after the link text */
-    a[href]:after { content: " (" attr(href) ") "; }
-    a[href] {
-        font-weight:bold;
-        text-decoration:underline;
-        color:#06c;
-        border:none;
-    }
-    /* Don't show link destinations for JavaScript or internal links */ 
-    a[href^="javascript:"]:after, a[href^="#"]:after { content:""; }
-    
-    /* Show abbr title value in brackets after the text */
-    abbr[title]:after { content: " (" attr(title) ")"; }
-
-    figure { 
-        margin-bottom:1em; 
-        overflow:hidden;
-    }
-
-    figure img { border:1px solid #000; }
 }

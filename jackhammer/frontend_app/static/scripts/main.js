@@ -34,7 +34,7 @@ const observerCallback = (entries) => {
 const observer = new IntersectionObserver(observerCallback, options)
 
 window.onload = () => { // waits for the page to load. Investigate async/defer.
-  document.querySelector('#sidebar-tab-hotload').style.display = 'block'
+  document.querySelector('#sidebar-tab-hotload').style.display = 'flex'
 
   const targets = document.querySelectorAll('.article')
   targets.forEach(target => {
