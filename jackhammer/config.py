@@ -19,13 +19,15 @@ class Config:
         # For ARTICLES_REPO, target the raw text files in case a github
         # repository is provided.
         try:
+            # huh, sequences of strings get cleanly concatenated
             is_github = re.match(
-                          r""".*github.com\/(\w+)\/(\w+)
-                                ($|\.git$|\/tree/(\w+)$)""",
+                          r".*github.com\/(\w+)\/(\w+)"
+                          r"($|\.git$|\/tree/(\w+)$)",
                           self.ARTICLES_REPO)
         except TypeError:
             print("Empty or non-string configuration variable.")
-        if is_github:
+        if is_github: 
+            print("Found github url as article source")
             repo_details = is_github.groups()
             # user, repository name, branch (optional), respectively
             textfiles_url = r"https://raw.githubusercontent.com/" +\
@@ -33,8 +35,7 @@ class Config:
             if repo_details[3]:
                 textfiles_url += repo_details[3]
             else:
-                textfiles_url += "master"
-
+                textfiles_url += "master" 
             self.ARTICLES_REPO = textfiles_url
 
 
