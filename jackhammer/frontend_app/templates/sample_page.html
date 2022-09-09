@@ -13,7 +13,7 @@
 
 {% block sidebar_content %}
     {% for i in paginated_articles %}
-        --------------<br>
+        <br><br><br>
     <a href = "/{{i.doc_type.name}}/{{i.slug}}">⊕</a> 
     <a id="sidebar_{{i.slug}}" href="#{{i.slug}}">{{ i.title }}</a><br>
     {% endfor %}
@@ -26,19 +26,8 @@ https://stackoverflow.com/questions/44703850/use-a-variable-name-for-a-blocks-na
 Logic in templates is discouraged.
 -->       
 
-{% block content %}
-    <br><br>
-    <h1>Hello</h1>
-    This is the content of Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-    <a href = '/log/the-rebel-albert-camus'>consequat</a>.
-    <br> Duis aute irure dolor in reprehenderit in voluptate velit esse
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    <br><br>
-    
-    Articles:<br>
+{% block content %} 
+  
     {% for article in paginated_articles %}
     <!-- Block: placeholder, inheritance, overriding. Include: proper for different variable contexts. Macro: like Include, more flexible-->
         {% include "article_item.html"%}    
@@ -49,8 +38,8 @@ Logic in templates is discouraged.
     <a href="{{ previous_url }}">Newer posts</a>
     {% endif %}
     {% if next_url %}
+    | 
     <a href="{{ next_url }}">Older posts</a>
 {% endif %}
-
 {% endblock %}
 

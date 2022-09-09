@@ -15,7 +15,7 @@
 /*TODO use CSS propertie for color */
     div.nav_wrap  a {
         text-decoration: none;
-        color:#0271fb;
+        background-color: beige;
     }
     div.nav_wrap a:hover, div.nav_wrap a:focus{ color:#000}
 
@@ -26,13 +26,22 @@
        drops it from box calculations.*/
         height: 100vh; 
 
-        font-family: Verdana, monospace;
-        line-height: 1.5em;
+        font-family: Bitstream Vera Serif;
+        line-height: 1.6em;
     }
     h1 {
         font-size: 1.2em;
         /* allow the mobile overlay button to appear next to the title */
         display: inline; 
+    }
+
+    h2{
+        font-size: 1em;
+    }
+
+    a {
+        color: brown;
+        text-decoration: none;
     }
 
     .logo {
@@ -42,25 +51,35 @@
     }
 
     img {
+        color: brown;
     }
-    sup {
-/*TODO superscript; second line gets printed on the first otherwise; this shouldn't happen;
-    should investigate*/
-        line-height: 1.50em; 
-    }
+    
     input.note-toggle, input.overlay-toggle {
 /* TODO needs name refactoring; hides sidenote and mobile semantics overlay-to-be checkboxes
     that's a nice task for sed/awk intro */
         display:none;
     }
+    /*button styling is bulma class copypasta */
     button {
-        background-color: #f8f8f8;
-        height: 2em;
-        width: 6em;
+        background-color: white;
+        border-color: #dbdbdb;
+        border-width: 1px;
+        color: #363636;
+        cursor: pointer;
+        justify-content: center;
+        padding-bottom: calc(0.5em - 1px);
+        padding-left: 1em;
+        padding-right: 1em;
+        padding-top: calc(0.5em - 1px);
+        text-align: center;
+        white-space: nowrap;
     }
         
     button:hover {
+        border-color: #b5b5b5;
+        color: #363636;
         }
+
 
     .flex_wrap {
     /* itself is block, otherwise use inline-flex to get inline-block behavior; 
@@ -81,7 +100,9 @@
       }
     .content_wrap{
         overflow-y: auto;
-        width: 100%
+        width: 100%;
+        margin-top: 2.5em;
+        margin-bottom: 2.5em;
    }
     main {
         max-width: 45em;
@@ -89,10 +110,13 @@
         margin-right: 1.5em;
     }
     .sidenote{
-      float: right;
-      max-width: 20em;
-      font-size: 0.85em;
-      font-style: italic;
+        float: right;
+        max-width: 20em;
+        font-size: 0.85em;
+        font-style: italic;
+        line-height: inherit; 
+        background-color: beige;
+        padding: 0.8em;
       /* this kludge is necessary with floating elements as the sidenote has a width itself 
        * though im sure there must be a better way */
       margin-right: -22em;
@@ -134,7 +158,9 @@
         clear: both;
         width: 95%;
         max-width: 95%;
-        margin: 1.5rem 2.5%;
+        margin-top: 2.5rem;
+        /* Unset the negative margin kludge */
+        margin-right: unset;
         position: relative; 
     }
 }
