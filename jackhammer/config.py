@@ -5,7 +5,8 @@ import re
 class Config:
     # Articles repository URL
     ARTICLES_REPO = environ.get("ARTICLES_REPO")
-
+    # URL pointing to a json list of articles with a name field
+    ARTICLES_INDEX = ''
     # General
     SECRET_KEY = environ.get('SECRET_KEY')
 
@@ -37,6 +38,8 @@ class Config:
             else:
                 textfiles_url += "master" 
             self.ARTICLES_REPO = textfiles_url
+            self.ARTICLES_INDEX = r"https://api.github.com/repos/" +\
+                repo_details[0] + "/" + repo_details[1] + "/contents/"
 
 
 # Instantiate the class, so that I may customize the ARTICLES_REPO attribute

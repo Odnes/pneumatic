@@ -56,7 +56,11 @@ def article_from_md(**kwargs):
     if 'dict' in kwargs:
         prepared_dict = kwargs['dict']
     else:
-        filename = request.args.get('filename', None, type=str)
+        if 'filename' in kwargs:
+            filename = kwargs['filename']
+        else:
+            filename = request.args.get('filename', None, type=str)
+
         prepared_dict = dict_from_md(filename)
         #  Alternate output is error string; should use try/catch instead
         if not isinstance(prepared_dict, dict):
@@ -103,3 +107,24 @@ def update_article():
 
     db.session.delete(article_to_update)
     return article_from_md(dict=prepared_dict)+'<br>Update operation returned.'
+
+
+from urllib.request import urlopen
+import json
+@current_app.route('/admin/generate_db')
+def generate_db():
+    index_url = current_app.config['ARTICLES_INDEX']
+    def pull_index(index_url):
+        with urlopen(index_url) as f:    
+            index = json.load(f)
+            file_list = []
+            for entry in index:
+                file_list.append(entry['name'])
+            return file_list
+    file_list = pull_index(index_url)
+    for filename in file_list:
+        article_from_md(filename=filename)
+    # TODO Prompt to erase database (remomve db_create() comment from app root)
+    # TODO Import metadata from CSV
+    # TODO Upload/update article upon push
+    return "yay!"
