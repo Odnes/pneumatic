@@ -36,7 +36,7 @@ def convert_sidenotes(source_text):
                                           string.punctuation.replace('-', '')))
         sidenote_html = \
             f"""
-                <label for="sn-{clean_slug}">⊕</label>
+                <label class="sidenote-mark" for="sn-{clean_slug}">⊕</label>
                 <input  type="checkbox" class="note-toggle"
                 id="sn-{clean_slug}" >
                 <sup class="sidenote">{match_obj.group(1)}</sup>

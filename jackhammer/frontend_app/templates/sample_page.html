@@ -14,8 +14,10 @@
 {% block sidebar_content %}
     {% for i in paginated_articles %}
         <br><br><br>
-    <a href = "/{{i.doc_type.name}}/{{i.slug}}">⊕</a> 
-    <a id="sidebar_{{i.slug}}" href="#{{i.slug}}">{{ i.title }}</a><br>
+    <div class ="sidebar-title">
+        <a class="page-link" href = "/{{i.doc_type.name}}/{{i.slug}}">⊕</a> 
+        <a class="anchor-link" id="sidebar_{{i.slug}}" href="#{{i.slug}}">{{ i.title }}</a><br>
+    </div>
     {% endfor %}
 {% endblock %}
 

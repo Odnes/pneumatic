@@ -20,9 +20,8 @@ def hello():
                            paginated_articles=pagination.items,
                            next_url=next_url,
                            previous_url=previous_url,
-                           title='jinja demo site',
-                           description="smarter page templates \
-                           with flask and jinja")
+                           title='Tip the iceberg',
+                           description="WIP")
 
 
 @current_app.route('/<doc_type>/<slug>')
