@@ -1,18 +1,7 @@
-*.sublime-workspace
-.vscode
-.idea
 .venv
 .flaskenv
-**/example.db
 __pycache__
 app.db
 
-articles
 assets
 certs
-
-webdasein.geany
-
-build
-dist
-jackhammer.egg-info

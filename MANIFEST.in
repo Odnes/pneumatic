@@ -1,3 +1,0 @@
-graft jackhammer/frontend_app/static
-graft jackhammer/frontend_app/templates
-global-exclude *.pyc
