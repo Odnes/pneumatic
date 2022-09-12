@@ -1,7 +1,7 @@
-from flask import request, current_app
+from flask import request, render_template, current_app
 from . import db
 from ..models import Tags, DocTypes, DocStatuses, Articles
-from .lib import dict_from_md
+from .lib import dict_from_md, load_metadata_manifest, pull_index
 
 
 @current_app.route('/admin')
@@ -23,8 +23,12 @@ def create_tag():
 
 # needs DRYing up via metaprogramming
 @current_app.route('/admin/create_status')
-def create_status():
-    name = request.args.get('name')
+def create_status(**kwargs):
+    if 'name' in kwargs:
+        name = kwargs['name']
+    else:
+        name = request.args.get('name')
+
     if name:
         existing_statuses = DocStatuses.query.filter(DocStatuses.name ==
                                                  name).first()
@@ -37,8 +41,12 @@ def create_status():
 
 
 @current_app.route('/admin/create_type')
-def create_type():
-    name = request.args.get('name')
+def create_type(**kwargs):
+    if 'name' in kwargs:
+        name = kwargs['name']
+    else:
+        name = request.args.get('name')
+
     if name:
         existing_types = DocTypes.query.filter(DocTypes.name ==
                                                  name).first()
@@ -109,22 +117,30 @@ def update_article():
     return article_from_md(dict=prepared_dict)+'<br>Update operation returned.'
 
 
-from urllib.request import urlopen
-import json
 @current_app.route('/admin/generate_db')
 def generate_db():
-    index_url = current_app.config['ARTICLES_INDEX']
-    def pull_index(index_url):
-        with urlopen(index_url) as f:    
-            index = json.load(f)
-            file_list = []
-            for entry in index:
-                file_list.append(entry['name'])
-            return file_list
-    file_list = pull_index(index_url)
-    for filename in file_list:
-        article_from_md(filename=filename)
-    # TODO Prompt to erase database (remomve db_create() comment from app root)
-    # TODO Import metadata from CSV
-    # TODO Upload/update article upon push
-    return "yay!"
+    confirm_wipe = request.args.get('confirm-wipe')
+    if not confirm_wipe:
+        return render_template('confirm_db_generation.html')
+    if confirm_wipe != 'y':
+        return 'Database (re)generation aborted by user'
+    else:
+        index_url = current_app.config['ARTICLES_INDEX']
+        file_list = pull_index(index_url)
+        if file_list:
+            db.drop_all()
+            db.create_all()
+            manifest = load_metadata_manifest()
+
+        for name in manifest['type']:
+            create_type(name=name)
+        for name in manifest['status']:
+            create_status(name=name)
+
+        for filename in file_list:
+            if filename.endswith('.md'):
+                article_from_md(filename=filename)
+        return 'Database generation finished'
+# TODO Upload/update article upon push
+# TODO make transactional
+

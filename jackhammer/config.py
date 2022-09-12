@@ -39,7 +39,7 @@ class Config:
                 textfiles_url += "master" 
             self.ARTICLES_REPO = textfiles_url
             self.ARTICLES_INDEX = r"https://api.github.com/repos/" +\
-                repo_details[0] + "/" + repo_details[1] + "/contents/"
+                repo_details[0] + "/" + repo_details[1] + "/contents"
 
 
 # Instantiate the class, so that I may customize the ARTICLES_REPO attribute

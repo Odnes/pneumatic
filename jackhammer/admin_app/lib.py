@@ -2,7 +2,10 @@ import markdown
 import datetime
 import re
 import string
+import json
+import csv
 import requests
+from urllib.request import urlopen
 from flask import current_app
 from ..models import Tags, DocTypes, DocStatuses
 
@@ -105,3 +108,21 @@ def dict_from_md(filename):
     prepared_dict['status_id'] = status_id
 
     return prepared_dict
+
+
+def load_metadata_manifest(filename='metadata_manifest.csv'):
+    with urlopen(current_app.config['ARTICLES_REPO'] +
+                 '/' + filename) as ftpstream:
+        # urllib FTP default is in binary mode, hence all this decoding stuff
+        metadata_manifest = list(csv.reader(ftpstream.read().decode('utf-8')))
+        return {'type': metadata_manifest[0], 'status': metadata_manifest[1]}
+
+
+def pull_index(index_url):
+    with urlopen(index_url) as ftpstream:
+        index = json.load(ftpstream)
+        file_list = []
+        for entry in index:
+            file_list.append(entry['name'])
+        return file_list
+ 
