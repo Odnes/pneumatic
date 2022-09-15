@@ -47,9 +47,13 @@ def convert_sidenotes(source_text):
         return sidenote_html
     # DOTALL flag enables newlines to be matched by dot. Equivalent to grep's
     # "\_."
-    # ? makes * non-greedy (matches up to first tail pattern occurence instead of
-    # last)
-    pattern = re.compile(r'\n\* (.*?) \*\n', re.DOTALL)
+    # ? makes * non-greedy (matches up to first tail pattern occurence instead
+    # of last)
+    pattern = re.compile('\n\*\ (.*?)\ \*\n', re.DOTALL)
+    # Agh, doesn't matter at the end of the day, because the markdown parser runs
+    # first, and interprets the newlined part as separate paragraph, and then html
+    # tags get jumbled up when the regex substitution runs. Just avoid newlines
+    # in sidenotes.
     md_with_sidenotes = pattern.sub(unique_id_replacement, source_text)
     return md_with_sidenotes
 
