@@ -45,8 +45,11 @@ def convert_sidenotes(source_text):
                 <sup class="sidenote">{match_obj.group(1)}</sup>
              """
         return sidenote_html
-    # Is a RegEx solution the simplest possible?
-    pattern = re.compile(r'\n\* (.*) \*\n')
+    # DOTALL flag enables newlines to be matched by dot. Equivalent to grep's
+    # "\_."
+    # ? makes * non-greedy (matches up to first tail pattern occurence instead of
+    # last)
+    pattern = re.compile(r'\n\* (.*?) \*\n', re.DOTALL)
     md_with_sidenotes = pattern.sub(unique_id_replacement, source_text)
     return md_with_sidenotes
 
